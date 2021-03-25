@@ -1,21 +1,17 @@
+package databaseServices;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DatabaseSeed {
   public static void main(String args[]) {
-
-    // To replace with DB credentials
-    String username = "adria";
-    String password = "password";
 
     Connection c = null;
     Statement stmt = null;
 
     try {
-      Class.forName("org.postgresql.Driver");
-      c = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cz4013", username, password);
+      Class.forName(Connect.DRIVER_NAME);
+      c = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
       stmt = c.createStatement();
 
       clearTables(c, stmt);
