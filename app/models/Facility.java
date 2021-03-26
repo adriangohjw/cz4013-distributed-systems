@@ -11,14 +11,6 @@ public class Facility {
   Facility() {
   }
 
-  private static void setupConnection() {
-    try {
-      conn = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
-    } catch (SQLException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage());
-    } 
-  }
-
   // sample Query
   public static String getName(Integer id) {
 
@@ -33,9 +25,7 @@ public class Facility {
         result = rs.getString("name");
       }
 
-      rs.close();
-      stmt.close();
-      conn.close();
+      closeConnection(rs, stmt, conn);
 
       return result;
     }
@@ -44,6 +34,24 @@ public class Facility {
       return null;
     }
 
+  }
+
+  private static void setupConnection() {
+    try {
+      conn = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
+    } 
+  }
+
+  private static void closeConnection(ResultSet rs, Statement stmt, Connection conn) {
+    try {
+      rs.close();
+      stmt.close();
+      conn.close();
+    } catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
+    }
   }
 
 }
