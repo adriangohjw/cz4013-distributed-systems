@@ -22,6 +22,17 @@ public class Availability extends Connect {
   public static Integer SATURDAY  = 6;
   public static Integer SUNDAY    = 7;
 
+  public static HashMap<Integer, String> dayMappings =  new HashMap<Integer, String>();
+  static {
+    dayMappings.put(MONDAY, "monday");
+    dayMappings.put(TUESDAY, "tuesday");
+    dayMappings.put(WEDNESDAY, "wednesday");
+    dayMappings.put(THURSDAY, "thursday");
+    dayMappings.put(FRIDAY, "friday");
+    dayMappings.put(SATURDAY, "saturday");
+    dayMappings.put(SUNDAY, "sunday");
+  }
+
   public Integer facilityId;
   public String day;
   public LocalTime startTime, endTime;
@@ -100,15 +111,6 @@ public class Availability extends Connect {
 
 
   static String getDayMapping(Integer dayInteger) {
-    HashMap<Integer, String> dayMappings = new HashMap<Integer, String>();
-    dayMappings.put(MONDAY, "monday");
-    dayMappings.put(TUESDAY, "tuesday");
-    dayMappings.put(WEDNESDAY, "wednesday");
-    dayMappings.put(THURSDAY, "thursday");
-    dayMappings.put(FRIDAY, "friday");
-    dayMappings.put(SATURDAY, "saturday");
-    dayMappings.put(SUNDAY, "sunday");
-
     if (dayMappings.get(dayInteger) == null) {
       try {
         throw new UnacceptableInputException("dayInteger value is unacceptable");
@@ -122,16 +124,7 @@ public class Availability extends Connect {
   }
 
   static Integer getDayMapping(String dayString) {
-    HashMap<String, Integer> dayMappings = new HashMap<String, Integer>();
-    dayMappings.put("monday", MONDAY);
-    dayMappings.put("tuesday", TUESDAY);
-    dayMappings.put("wednesday", WEDNESDAY);
-    dayMappings.put("thursday", THURSDAY);
-    dayMappings.put("friday", FRIDAY);
-    dayMappings.put("saturday", SATURDAY);
-    dayMappings.put("sunday", SUNDAY);
-
-    if (dayMappings.get(dayString) == null) {
+    if (reversedDayMappings().get(dayString) == null) {
       try {
         throw new UnacceptableInputException("dayString value is unacceptable");
       } 
@@ -140,7 +133,7 @@ public class Availability extends Connect {
       }
     }
 
-    return dayMappings.get(dayString);
+    return reversedDayMappings().get(dayString);
   }
 
 
@@ -159,6 +152,14 @@ public class Availability extends Connect {
 
   private boolean isInDaysSelected(Integer[] daysSelected) {
     return Arrays.stream(getDays(daysSelected)).anyMatch(this.day::equals);
+  }
+
+  private static HashMap<String, Integer> reversedDayMappings() {
+    HashMap<String, Integer> reversedDayMappings = new HashMap<String, Integer>();
+    for(HashMap.Entry<Integer, String> entry : dayMappings.entrySet()){
+      reversedDayMappings.put(entry.getValue(), entry.getKey());
+    }
+    return reversedDayMappings;
   }
 
   private static List<Availability> executeQuery(String query) throws RecordNotFoundException {
