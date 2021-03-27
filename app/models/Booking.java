@@ -53,15 +53,13 @@ public class Booking extends Connect {
   }
 
   public static boolean updateTiming(Integer id, Integer advanceOrPostpone, Integer offsetMinutes) {
-    boolean isTimingUpdate = false;
-
     try {
       validateAdvanceOrPostpone(advanceOrPostpone);
       validateOffsetMinutes(offsetMinutes);
     }
     catch (UnacceptableInputException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
-      return isTimingUpdate;
+      return false;
     }
 
     Booking booking;
@@ -70,7 +68,7 @@ public class Booking extends Connect {
     }
     catch (RecordNotFoundException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
-      return isTimingUpdate;
+      return false;
     }
 
     try {
@@ -88,12 +86,10 @@ public class Booking extends Connect {
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
-      return isTimingUpdate;
+      return false;
     }
 
-
-    isTimingUpdate = true;
-    return isTimingUpdate;
+    return true;
   }
 
   private static void validateBookingAvailability(Integer facilityId, Integer dayInteger, LocalTime startTime, LocalTime endTime, Integer idToExclude) throws Exception {
