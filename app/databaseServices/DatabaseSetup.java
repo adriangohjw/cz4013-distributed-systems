@@ -70,6 +70,7 @@ public class DatabaseSetup {
         "CREATE TABLE bookings ( " +
           "id SERIAL PRIMARY KEY, " +
           "facility_id  INT NOT NULL, " +
+          "day          VARCHAR(10) NOT NULL, " +
           "start_time   TIMESTAMP NOT NULL, " +
           "end_time     TIMESTAMP NOT NULL, " +
           "CONSTRAINT   fk_facility " + 
