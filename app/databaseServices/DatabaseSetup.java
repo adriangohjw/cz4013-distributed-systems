@@ -51,7 +51,7 @@ public class DatabaseSetup {
       sqls.add(
         "CREATE TABLE facilities (" +
           "id SERIAL PRIMARY KEY, " +
-          "type       CHAR(50)    NOT NULL, " +
+          "subtype    CHAR(50)    NOT NULL, " +
           "name       CHAR(256)   NOT NULL " +
         ");"
       );

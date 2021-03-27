@@ -49,7 +49,7 @@ public class DatabaseSeed {
     List<String> sqls = new ArrayList<String>();
     
     sqls.add(
-      "INSERT INTO facilities (id, type, name) VALUES " +
+      "INSERT INTO facilities (id, subtype, name) VALUES " +
       "(1, 'meeting_room', 'Meeting Room 1'), " + 
       "(2, 'lecture_theatre', 'LT 1'); "
     );
