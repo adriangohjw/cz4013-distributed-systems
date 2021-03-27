@@ -37,8 +37,6 @@ public class Facility extends Connect {
 
       List<Facility> rs = executeQuery(query);
       Facility facility = rs.get(0);
-
-      FacilityCache.put(facility);
       
       return facility.id;
     }
@@ -58,13 +56,13 @@ public class Facility extends Connect {
 
       Integer rsCount = 0;
       while (rs.next()) {
-        results.add(
-          new Facility(
-            rs.getInt("id"), 
-            rs.getString("subtype"), 
-            rs.getString("name")
-          )
+        Facility facility = new Facility(
+          rs.getInt("id"), 
+          rs.getString("subtype"), 
+          rs.getString("name")
         );
+        FacilityCache.put(facility);
+        results.add(facility);
         rsCount++;
       }
 
