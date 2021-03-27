@@ -29,4 +29,18 @@ public class Connect {
     }
     conn.close();
   }
+
+  protected static void executeUpdate(String query) {
+    try {
+      setupConnection();
+      Statement stmt = getConn().createStatement();
+
+      stmt.executeUpdate(query);
+
+      closeConnection(null, stmt);
+    }
+    catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
+    }
+  }
 }

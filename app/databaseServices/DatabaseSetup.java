@@ -1,33 +1,20 @@
 package databaseServices;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseSetup {
+public class DatabaseSetup extends Connect {
   public static void main(String args[]) {
-
-    Connection c = null;
-    Statement stmt = null;
-
     try {
-      Class.forName(Connect.DRIVER_NAME);
-      c = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
-      stmt = c.createStatement();
-
-      dropAllTables(c, stmt);
-      createAllTables(c, stmt);
-
-      stmt.close();         
-      c.close();
-      
-      System.out.println("Tables created successfully");
+      dropAllTables();
+      createAllTables();
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
+    System.out.println("Tables created successfully");
   }
 
-  private static void dropAllTables(Connection c, Statement stmt) {
+  private static void dropAllTables() {
     
     List<String> tableNames = new ArrayList<String>();
     tableNames.add("monitors");
@@ -37,7 +24,11 @@ public class DatabaseSetup {
 
     for (String tableName : tableNames) {
       try {
-        stmt.executeUpdate("DROP TABLE " + tableName);
+        String query = String.format(
+          "DROP TABLE %s;", 
+          tableName
+        );
+        executeUpdate(query);
       } 
       catch (Exception e) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -45,7 +36,7 @@ public class DatabaseSetup {
     }
   }
 
-  private static void createAllTables(Connection c, Statement stmt) {
+  private static void createAllTables() {
 
     List<String> sqls = new ArrayList<String>();
       sqls.add(
@@ -93,7 +84,7 @@ public class DatabaseSetup {
 
       try {
         for (String sql : sqls) {
-          stmt.executeUpdate(sql);
+          executeUpdate(sql);
         }
       }
       catch (Exception e) {

@@ -1,5 +1,4 @@
 package databaseServices;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,11 @@ public class DatabaseSeed extends Connect {
 
     for (String tableName : tableNames) {
       try {
-        executeUpdate("DELETE FROM " + tableName);
+        String query = String.format(
+          "DELETE FROM %s;", 
+          tableName
+        );
+        executeUpdate(query);
       } 
       catch (Exception e) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -67,20 +70,6 @@ public class DatabaseSeed extends Connect {
       catch (Exception e) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage());
       }
-    }
-  }
-
-  private static void executeUpdate(String query) {
-    try {
-      setupConnection();
-      Statement stmt = getConn().createStatement();
-
-      stmt.executeUpdate(query);
-
-      closeConnection(null, stmt);
-    }
-    catch (Exception e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
   }
 }
