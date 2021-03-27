@@ -46,7 +46,7 @@ public class Monitor extends Connect {
     return isCreated;
   }
 
-  private static List<Monitor> executeQuery(String query) {
+  private static List<Monitor> executeQuery(String query) throws RecordNotFoundException {
     List<Monitor> results = new ArrayList<Monitor>();
     
     try {
@@ -74,6 +74,9 @@ public class Monitor extends Connect {
 
       closeConnection(rs, stmt);
     } 
+    catch (RecordNotFoundException e) {
+      throw e;
+    }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }

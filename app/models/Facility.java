@@ -41,7 +41,7 @@ public class Facility extends Connect {
     }
   }
 
-  private static List<Facility> executeQuery(String query) {
+  private static List<Facility> executeQuery(String query) throws RecordNotFoundException {
     List<Facility> results = new ArrayList<Facility>();
     
     try {
@@ -67,6 +67,9 @@ public class Facility extends Connect {
 
       closeConnection(rs, stmt);
     } 
+    catch (RecordNotFoundException e) {
+      throw e;
+    }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }

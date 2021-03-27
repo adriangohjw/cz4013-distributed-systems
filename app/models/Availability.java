@@ -96,14 +96,19 @@ public class Availability extends Connect {
         tableName, facilityId
       );
 
-    List<Availability> rs =  executeQuery(query);
-    for (Availability availability : rs) {
-      if (availability.isInDaysSelected(new Integer[]{dayInteger})) {
-        if (startTime.before(availability.startTime)) { break; }
-        if (endTime.after(availability.endTime)) { break; }
-        isPossible = true;
-        break;
+    try {
+      List<Availability> rs =  executeQuery(query);
+      for (Availability availability : rs) {
+        if (availability.isInDaysSelected(new Integer[]{dayInteger})) {
+          if (startTime.before(availability.startTime)) { break; }
+          if (endTime.after(availability.endTime)) { break; }
+          isPossible = true;
+          break;
+        }
       }
+    }
+    catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
 
     return isPossible;
@@ -149,7 +154,7 @@ public class Availability extends Connect {
     return Arrays.stream(getDays(daysSelected)).anyMatch(this.day::equals);
   }
 
-  private static List<Availability> executeQuery(String query) {
+  private static List<Availability> executeQuery(String query) throws RecordNotFoundException {
     List<Availability> results = new ArrayList<Availability>();
     
     try {
@@ -176,6 +181,9 @@ public class Availability extends Connect {
 
       closeConnection(rs, stmt);
     } 
+    catch (RecordNotFoundException e) {
+      throw e;
+    }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }

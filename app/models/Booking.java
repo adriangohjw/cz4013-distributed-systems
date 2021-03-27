@@ -49,7 +49,7 @@ public class Booking extends Connect {
     return bookingId;
   }
 
-  private static void validateBookingAvailability(Integer facilityId, Integer dayInteger, Time startTime, Time endTime) throws BookingUnavailableException {
+  private static void validateBookingAvailability(Integer facilityId, Integer dayInteger, Time startTime, Time endTime) throws Exception {
     if (Availability.isBookingPossible(facilityId, dayInteger, startTime, endTime) == false) {
       throw new BookingUnavailableException("Not within facility's availability");
     }
@@ -58,14 +58,9 @@ public class Booking extends Connect {
     }
   }
 
-  private static void validateStartTimeEndTime(Time startTime, Time endTime) {
-    try {
-      if (startTime.before(endTime) == false) {
-        throw new UnacceptableInputException("startTime is not before endTime");
-      }
-    } 
-    catch (UnacceptableInputException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage());
+  private static void validateStartTimeEndTime(Time startTime, Time endTime) throws UnacceptableInputException {
+    if (startTime.before(endTime) == false) {
+      throw new UnacceptableInputException("startTime is not before endTime");
     }
   }
 
@@ -77,13 +72,18 @@ public class Booking extends Connect {
         tableName, facilityId
       );
 
-    List<Booking> rs =  executeQuery(query);
-    for (Booking booking : rs) {
-      if (booking.isInDaysSelected(new Integer[]{dayInteger})) {
-        if (startTime.before(booking.startTime)) { break; }
-        if (endTime.after(booking.endTime)) { break; }
-        isPossible = true;
+    try {
+      List<Booking> rs = executeQuery(query);
+      for (Booking booking : rs) {
+        if (booking.isInDaysSelected(new Integer[]{dayInteger})) {
+          if (startTime.before(booking.startTime)) { break; }
+          if (endTime.after(booking.endTime)) { break; }
+          isPossible = true;
+        }
       }
+    }
+    catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
 
     return isPossible;
@@ -109,7 +109,7 @@ public class Booking extends Connect {
     return id;
   }
 
-  private static List<Booking> executeQuery(String query) {
+  private static List<Booking> executeQuery(String query) throws RecordNotFoundException {
     List<Booking> results = new ArrayList<Booking>();
     
     try {
@@ -137,6 +137,9 @@ public class Booking extends Connect {
 
       closeConnection(rs, stmt);
     } 
+    catch (RecordNotFoundException e) {
+      throw e;
+    }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
