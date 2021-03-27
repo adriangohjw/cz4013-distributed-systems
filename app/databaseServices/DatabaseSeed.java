@@ -3,30 +3,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseSeed {
+public class DatabaseSeed extends Connect {
   public static void main(String args[]) {
-
-    Connection c = null;
-    Statement stmt = null;
-
     try {
-      Class.forName(Connect.DRIVER_NAME);
-      c = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
-      stmt = c.createStatement();
-
-      clearTables(c, stmt);
-      populateTables(c, stmt);
-
-      stmt.close();         
-      c.close();
-      
+      clearTables();
+      populateTables();      
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
   }
 
-  private static void clearTables(Connection c, Statement stmt) {
+  private static void clearTables() {
     
     List<String> tableNames = new ArrayList<String>();
     tableNames.add("monitors");
@@ -36,7 +24,7 @@ public class DatabaseSeed {
 
     for (String tableName : tableNames) {
       try {
-        stmt.executeUpdate("DELETE FROM " + tableName);
+        executeUpdate("DELETE FROM " + tableName);
       } 
       catch (Exception e) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -44,7 +32,7 @@ public class DatabaseSeed {
     }
   }
 
-  private static void populateTables(Connection c, Statement stmt) {
+  private static void populateTables() {
     
     List<String> sqls = new ArrayList<String>();
     
@@ -74,12 +62,25 @@ public class DatabaseSeed {
 
     for (String sql : sqls) {
       try {
-        stmt.executeUpdate(sql);
-        System.out.println("Tables populated successfully");
+        executeUpdate(sql);
       } 
       catch (Exception e) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage());
       }
+    }
+  }
+
+  private static void executeUpdate(String query) {
+    try {
+      setupConnection();
+      Statement stmt = getConn().createStatement();
+
+      stmt.executeUpdate(query);
+
+      closeConnection(null, stmt);
+    }
+    catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
   }
 }
