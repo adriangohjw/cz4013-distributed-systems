@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import databaseServices.Connect;
+import databaseServices.caches.FacilityCache;
 import databaseServices.exceptions.RecordNotFoundException;
 
 public class Facility extends Connect {
 
   static String tableName = "facilities";
 
-  Integer id;
-  String subtype;
-  String name;
+  public Integer id;
+  public String subtype;
+  public String name;
 
   Facility(Integer id, String subtype, String name) {
     this.id = id;
@@ -25,15 +26,21 @@ public class Facility extends Connect {
   }
 
   public static Integer getIdFromName(String name) {
-    try {      
+    Facility cacheEntry = FacilityCache.get(name);
+    if (cacheEntry != null) return cacheEntry.id;
+
+    try {
       String query = String.format(
         "SELECT * FROM %s WHERE name = '%s';",
         tableName, name
       );
 
       List<Facility> rs = executeQuery(query);
+      Facility facility = rs.get(0);
 
-      return rs.get(0).id;
+      FacilityCache.put(facility);
+      
+      return facility.id;
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
