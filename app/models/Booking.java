@@ -32,9 +32,10 @@ public class Booking extends Connect {
 
   public static Integer create(String facilityName, Integer dayInteger, LocalTime startTime, LocalTime endTime) {
     Integer bookingId = null;
+    Integer facilityId = null;
 
     try {
-      Integer facilityId = Facility.getIdFromName(facilityName);
+      facilityId = Facility.getIdFromName(facilityName);
       String dayString = Availability.getDayMapping(dayInteger);
       validateStartTimeEndTime(startTime, endTime);
       validateBookingAvailability(facilityId, dayInteger, startTime, endTime, null);
@@ -48,6 +49,8 @@ public class Booking extends Connect {
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
+
+    Monitor.alertActiveListeners(facilityId);
 
     return bookingId;
   }
@@ -88,6 +91,8 @@ public class Booking extends Connect {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
       return false;
     }
+
+    Monitor.alertActiveListeners(booking.facilityId);
 
     return true;
   }

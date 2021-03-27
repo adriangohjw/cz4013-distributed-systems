@@ -6,6 +6,7 @@ import java.util.List;
 
 import databaseServices.Connect;
 import databaseServices.exceptions.RecordNotFoundException;
+import databaseServices.exceptions.UnacceptableInputException;
 
 public class Monitor extends Connect {
 
@@ -44,6 +45,30 @@ public class Monitor extends Connect {
     }
 
     return isCreated;
+  }
+
+  public static void alertActiveListeners(Integer facilityId) {
+    try {
+      validateFacilityId(facilityId);
+
+      String query = String.format(
+        "SELECT * FROM %s WHERE facility_id = %d AND '%s' <= end_time;",
+        tableName, facilityId, LocalDateTime.now()
+      );
+      List<Monitor> activeListeners = executeQuery(query);
+
+      // TODO: alerting all active listeners;
+      
+    }
+    catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
+    }
+  }
+
+  private static void validateFacilityId(Integer facilityId) throws UnacceptableInputException {
+    if (facilityId == null || facilityId <= 0) {
+      throw new UnacceptableInputException("startTime is not before endTime");
+    }
   }
 
   private static List<Monitor> executeQuery(String query) throws RecordNotFoundException {
