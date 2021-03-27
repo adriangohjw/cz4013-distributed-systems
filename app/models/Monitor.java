@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import databaseServices.Connect;
+import databaseServices.caches.MonitorCache;
 import databaseServices.exceptions.RecordNotFoundException;
 import databaseServices.exceptions.UnacceptableInputException;
 
@@ -39,6 +40,11 @@ public class Monitor extends Connect {
         tableName, facilityId, address, port, start_time, end_time
       );
       isCreated = execute(query);
+      
+      Monitor monitor = new Monitor(facilityId, address, port, Timestamp.valueOf(start_time), Timestamp.valueOf(end_time));
+      if (isCreated) {
+        MonitorCache.put(monitor);
+      }
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -55,7 +61,10 @@ public class Monitor extends Connect {
         "SELECT * FROM %s WHERE facility_id = %d AND '%s' <= end_time;",
         tableName, facilityId, LocalDateTime.now()
       );
-      List<Monitor> activeListeners = executeQuery(query);
+      List<Monitor> activeListeners = 
+        MonitorCache.cache.containsKey(facilityId) ?
+          MonitorCache.cache.get(facilityId) :
+          executeQuery(query) ;
 
       // TODO: alerting all active listeners;
       
@@ -72,7 +81,7 @@ public class Monitor extends Connect {
   }
 
   private static List<Monitor> executeQuery(String query) throws RecordNotFoundException {
-    List<Monitor> results = new ArrayList<Monitor>();
+    List<Monitor> monitors = new ArrayList<Monitor>();
     
     try {
       setupConnection();
@@ -81,7 +90,7 @@ public class Monitor extends Connect {
 
       Integer rsCount = 0;
       while (rs.next()) {
-        results.add(
+        monitors.add(
           new Monitor(
             rs.getInt("facility_id"), 
             rs.getString("address"), 
@@ -106,7 +115,9 @@ public class Monitor extends Connect {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
 
-    return results;
+    MonitorCache.put(monitors);
+
+    return monitors;
   }
 
   private static boolean execute(String query) {
