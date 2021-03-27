@@ -88,6 +88,27 @@ public class Availability extends Connect {
 
   }
 
+  static boolean isBookingPossible(Integer facilityId, Integer dayInteger, Time startTime, Time endTime) {
+    boolean isPossible = false;
+
+    String query = String.format(
+        "SELECT * FROM %s WHERE facility_id = %d",
+        tableName, facilityId
+      );
+
+    List<Availability> rs =  executeQuery(query);
+    for (Availability availability : rs) {
+      if (availability.isInDaysSelected(new Integer[]{dayInteger})) {
+        if (startTime.before(availability.startTime)) { break; }
+        if (endTime.after(availability.endTime)) { break; }
+        isPossible = true;
+        break;
+      }
+    }
+
+    return isPossible;
+  }
+
 
   static String getDayMapping(Integer dayInteger) {
     HashMap<Integer, String> dayMappings = new HashMap<Integer, String>();
@@ -111,7 +132,7 @@ public class Availability extends Connect {
   }
 
 
-  private static String[] getDays(Integer[] dayIntegers) {
+  static String[] getDays(Integer[] dayIntegers) {
     String[] results = new String[dayIntegers.length];
     
     Integer index = 0;

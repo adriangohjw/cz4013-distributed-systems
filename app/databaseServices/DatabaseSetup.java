@@ -71,8 +71,8 @@ public class DatabaseSetup {
           "id SERIAL PRIMARY KEY, " +
           "facility_id  INT NOT NULL, " +
           "day          VARCHAR(10) NOT NULL, " +
-          "start_time   TIMESTAMP NOT NULL, " +
-          "end_time     TIMESTAMP NOT NULL, " +
+          "start_time   TIME NOT NULL, " +
+          "end_time     TIME NOT NULL, " +
           "CONSTRAINT   fk_facility " + 
             "FOREIGN KEY(facility_id)" + 
               "REFERENCES facilities(id)" +
