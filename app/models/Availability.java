@@ -1,5 +1,6 @@
 package models;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,16 +24,16 @@ public class Availability extends Connect {
 
   public Integer facilityId;
   public String day;
-  public Time startTime, endTime;
+  public LocalTime startTime, endTime;
 
-  Availability(Integer facilityId, Integer dayInteger,Time startTime, Time endTime) {
+  Availability(Integer facilityId, Integer dayInteger,LocalTime startTime, LocalTime endTime) {
     this.facilityId = facilityId;
     this.day = getDayMapping(dayInteger);
     this.startTime = startTime;
     this.endTime = endTime;
   }
 
-  Availability(Integer facilityId, String dayString,Time startTime, Time endTime) {
+  Availability(Integer facilityId, String dayString, LocalTime startTime, LocalTime endTime) {
     this.facilityId = facilityId;
     this.day = dayString;
     this.startTime = startTime;
@@ -41,27 +42,10 @@ public class Availability extends Connect {
 
   public String toString() {
     return String.format(
-      "facility_id: %d, day: %s, start: %d:%d, end: %d:%d", 
-      facilityId, day, getStartTimeHour(), getStartTimeMin(), getEndTimeHour(), getEndTimeMin()
-      );
+      "facility_id: %d, day: %s, start: %s, end: %s", 
+      facilityId, day, startTime.toString(), endTime.toString()
+    );
   }
-
-  public Integer getStartTimeHour() {
-    return startTime.getHours();
-  }
-
-  public Integer getStartTimeMin() {
-    return startTime.getMinutes();
-  }
-
-  public Integer getEndTimeHour() {
-    return endTime.getHours();
-  }
-
-  public Integer getEndTimeMin() {
-    return endTime.getMinutes();
-  }
-
 
   public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {    
     try {      
@@ -88,7 +72,7 @@ public class Availability extends Connect {
 
   }
 
-  static boolean isBookingPossible(Integer facilityId, Integer dayInteger, Time startTime, Time endTime) {
+  static boolean isBookingPossible(Integer facilityId, Integer dayInteger, LocalTime startTime, LocalTime endTime) {
     boolean isPossible = false;
 
     String query = String.format(
@@ -100,8 +84,8 @@ public class Availability extends Connect {
       List<Availability> rs =  executeQuery(query);
       for (Availability availability : rs) {
         if (availability.isInDaysSelected(new Integer[]{dayInteger})) {
-          if (startTime.before(availability.startTime)) { break; }
-          if (endTime.after(availability.endTime)) { break; }
+          if (startTime.isBefore(availability.startTime)) { break; }
+          if (endTime.isAfter(availability.endTime)) { break; }
           isPossible = true;
           break;
         }
@@ -128,12 +112,35 @@ public class Availability extends Connect {
     if (dayMappings.get(dayInteger) == null) {
       try {
         throw new UnacceptableInputException("dayInteger value is unacceptable");
-      } catch (UnacceptableInputException e) {
+      } 
+      catch (UnacceptableInputException e) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage());
       }
     }
 
     return dayMappings.get(dayInteger);
+  }
+
+  static Integer getDayMapping(String dayString) {
+    HashMap<String, Integer> dayMappings = new HashMap<String, Integer>();
+    dayMappings.put("monday", MONDAY);
+    dayMappings.put("tuesday", TUESDAY);
+    dayMappings.put("wednesday", WEDNESDAY);
+    dayMappings.put("thursday", THURSDAY);
+    dayMappings.put("friday", FRIDAY);
+    dayMappings.put("saturday", SATURDAY);
+    dayMappings.put("sunday", SUNDAY);
+
+    if (dayMappings.get(dayString) == null) {
+      try {
+        throw new UnacceptableInputException("dayString value is unacceptable");
+      } 
+      catch (UnacceptableInputException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage());
+      }
+    }
+
+    return dayMappings.get(dayString);
   }
 
 
@@ -168,8 +175,8 @@ public class Availability extends Connect {
           new Availability(
             rs.getInt("facility_id"), 
             rs.getString("day"), 
-            rs.getTime("start_time"),
-            rs.getTime("end_time")
+            rs.getTime("start_time").toLocalTime(),
+            rs.getTime("end_time").toLocalTime()
           )
         );
         rsCount++;
