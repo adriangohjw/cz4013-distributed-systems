@@ -38,7 +38,7 @@ public class Monitor extends Connect {
         "INSERT INTO %s (facility_id, address, host, start_time, end_time) VALUES (%d, '%s', %d, '%s', '%s');",
         tableName, facilityId, address, port, start_time, end_time
       );
-      isCreated = executeUpdate(query);
+      isCreated = execute(query);
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -109,7 +109,7 @@ public class Monitor extends Connect {
     return results;
   }
 
-  private static boolean executeUpdate(String query) {
+  private static boolean execute(String query) {
     boolean isSuccessful = false;
 
     try {

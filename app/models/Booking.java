@@ -44,7 +44,7 @@ public class Booking extends Connect {
         "INSERT INTO %s (facility_id, day, start_time, end_time) VALUES (%d, '%s', '%s', '%s');",
         tableName, facilityId, dayString, startTime, endTime
       );
-      bookingId = executeUpdate(query);
+      bookingId = execute(query);
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -85,7 +85,7 @@ public class Booking extends Connect {
         "UPDATE %s SET start_time = '%s', end_time = '%s' WHERE id = %d;",
         tableName, newStartTime, newEndTime, booking.id
       );
-      executeUpdate(query);
+      execute(query);
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -180,7 +180,7 @@ public class Booking extends Connect {
     return Arrays.stream(Availability.getDays(daysSelected)).anyMatch(this.day::equals);
   }
 
-  private static Integer executeUpdate(String query) {
+  private static Integer execute(String query) {
     Integer id = null;
 
     try {
