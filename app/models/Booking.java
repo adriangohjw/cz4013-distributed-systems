@@ -23,11 +23,11 @@ public class Booking extends Connect {
 
   public static Integer create(String facilityName, Integer dayInteger, Timestamp startTime, Timestamp endTime) {
     Integer bookingId = null;
-  
-    Integer facilityId = Facility.getIdFromName(facilityName);
-    String dayString = Availability.getDayMapping(dayInteger);
 
     try {
+      Integer facilityId = Facility.getIdFromName(facilityName);
+      String dayString = Availability.getDayMapping(dayInteger);
+
       String query = String.format(
         "INSERT INTO %s (facility_id, day, start_time, end_time) VALUES (%d, '%s', '%s', '%s');",
         tableName, facilityId, dayString, startTime, endTime

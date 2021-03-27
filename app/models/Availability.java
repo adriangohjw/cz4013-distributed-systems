@@ -7,6 +7,7 @@ import java.util.List;
 
 import databaseServices.Connect;
 import databaseServices.exceptions.RecordNotFoundException;
+import databaseServices.exceptions.UnacceptableInputException;
 
 public class Availability extends Connect {
 
@@ -97,6 +98,14 @@ public class Availability extends Connect {
     dayMappings.put(FRIDAY, "friday");
     dayMappings.put(SATURDAY, "saturday");
     dayMappings.put(SUNDAY, "sunday");
+
+    if (dayMappings.get(dayInteger) == null) {
+      try {
+        throw new UnacceptableInputException("dayInteger value is unacceptable");
+      } catch (UnacceptableInputException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage());
+      }
+    }
 
     return dayMappings.get(dayInteger);
   }
