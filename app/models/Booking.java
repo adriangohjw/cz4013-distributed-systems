@@ -2,6 +2,7 @@ package models;
 import java.sql.*;
 
 import databaseServices.Connect;
+import databaseServices.exceptions.UnacceptableInputException;
 
 public class Booking extends Connect {
 
@@ -27,6 +28,7 @@ public class Booking extends Connect {
     try {
       Integer facilityId = Facility.getIdFromName(facilityName);
       String dayString = Availability.getDayMapping(dayInteger);
+      validateStartTimeEndTime(startTime, endTime);
 
       String query = String.format(
         "INSERT INTO %s (facility_id, day, start_time, end_time) VALUES (%d, '%s', '%s', '%s');",
@@ -55,6 +57,16 @@ public class Booking extends Connect {
     }
 
     return id;
+  }
+
+  private static void validateStartTimeEndTime(Timestamp startTime, Timestamp endTime) {
+    if (startTime.before(endTime) == false) {
+      try {
+        throw new UnacceptableInputException("startTime is not before endTime");
+      } catch (UnacceptableInputException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage());
+      }
+    }
   }
 
 }
