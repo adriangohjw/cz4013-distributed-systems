@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import databaseServices.Connect;
+import databaseServices.exceptions.RecordNotFoundException;
 
-public class Availability {
+public class Availability extends Connect {
 
   static Connection conn;
   static String tableName = "availabilities";
@@ -62,27 +63,21 @@ public class Availability {
   }
 
 
-  public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {
+  public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {    
+    try {      
+      String query = String.format(
+        "SELECT * FROM %s WHERE facility_id = %d",
+        tableName, facilityId
+      );
 
-    setupConnection();
-    
-    try {
       List<Availability> availabilities = new ArrayList<Availability>();
-      
-      Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName + " WHERE facility_id = " + String.valueOf(facilityId));
 
-      while ( rs.next() ) {
-        if (Arrays.asList(getDays(daysSelected)).contains(rs.getString("day"))) {
-          availabilities.add(
-            new Availability(
-              rs.getInt("facility_id"), rs.getString("day"), rs.getTime("start_time"), rs.getTime("end_time")
-            )
-          );
+      List<Availability> rs = executeQuery(query);
+      for (Availability availability : rs) {
+        if (availability.isInDaysSelected(daysSelected)) {
+          availabilities.add(availability);
         }
       }
-        
-      closeConnection(rs, stmt, conn);
 
       return availabilities;
     }
@@ -121,23 +116,41 @@ public class Availability {
   }
 
 
-  private static void setupConnection() {
-    try {
-      conn = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
-    } catch (SQLException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage());
-    } 
+  private boolean isInDaysSelected(Integer[] daysSelected) {
+    return Arrays.stream(getDays(daysSelected)).anyMatch(this.day::equals);
   }
 
-
-  private static void closeConnection(ResultSet rs, Statement stmt, Connection conn) {
+  private static List<Availability> executeQuery(String query) {
+    List<Availability> results = new ArrayList<Availability>();
+    
     try {
-      rs.close();
-      stmt.close();
-      conn.close();
-    } catch (Exception e) {
+      setupConnection();
+      Statement stmt = getConn().createStatement();
+      ResultSet rs = stmt.executeQuery(query);
+
+      Integer rsCount = 0;
+      while (rs.next()) {
+        results.add(
+          new Availability(
+            rs.getInt("facility_id"), 
+            rs.getString("day"), 
+            rs.getTime("start_time"),
+            rs.getTime("end_time")
+          )
+        );
+        rsCount++;
+      }
+
+      if (rsCount == 0) {
+        throw new RecordNotFoundException();
+      }
+
+      closeConnection(rs, stmt);
+    } 
+    catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
+
+    return results;
   }
-  
 }

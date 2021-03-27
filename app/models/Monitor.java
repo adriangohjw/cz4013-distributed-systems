@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import databaseServices.Connect;
 
-public class Monitor {
+public class Monitor extends Connect {
 
   static Connection conn;
   static String tableName = "monitors";
@@ -31,7 +31,7 @@ public class Monitor {
 
       isCreated = true;
 
-      closeConnection(null, stmt, conn);
+      closeConnection(null, stmt);
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -39,26 +39,4 @@ public class Monitor {
 
     return isCreated;
   }
-
-
-  private static void setupConnection() {
-    try {
-      conn = DriverManager.getConnection(Connect.DATABASE_URI, Connect.USERNAME, Connect.PASSWORD);
-    } catch (SQLException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage());
-    } 
-  }
-
-  private static void closeConnection(ResultSet rs, Statement stmt, Connection conn) {
-    try {
-      if (rs != null) {
-        rs.close();
-      }
-      stmt.close();
-      conn.close();
-    } catch (Exception e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage());
-    }
-  }
-
 }
