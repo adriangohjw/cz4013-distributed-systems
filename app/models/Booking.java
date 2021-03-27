@@ -146,7 +146,6 @@ public class Booking extends Connect {
 
     try {
       List<Booking> rs = executeQuery(query);
-      System.out.println(String.format("--- %s %s---", startTime, endTime));
       for (Booking booking : rs) {
         if (booking.isInDaysSelected(new Integer[]{dayInteger})) {
           if (booking.hasBookingClash(startTime, endTime)) {
