@@ -28,12 +28,18 @@ public class AvailabilityCache {
   }
 
   public static void put(List<Availability> availabilities) {
+    // assume all records in availabilities have the same facility_id
+    Integer key = (availabilities.size() == 0) ? null : availabilities.get(0).facilityId;
+
+    if (cache.containsKey(key)){
+      cache.replace(key, availabilities);
+      return ;
+    }
+    
     if (cache.size() == getSize()) {
       evictRandomCacheEntry();
     }
 
-    // assume all records in availabilities have the same facility_id
-    Integer key = (availabilities.size() == 0) ? null : availabilities.get(0).facilityId;
     cache.put(key, availabilities);
   }
 

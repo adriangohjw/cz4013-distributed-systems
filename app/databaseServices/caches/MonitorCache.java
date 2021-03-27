@@ -33,27 +33,31 @@ public class MonitorCache extends Cache {
 
     if (cache.containsKey(monitor.facilityId)) {
       monitors = cache.get(monitor.facilityId);
-    }
-    else {
-      monitors = new ArrayList<Monitor>();
-
-      if (cache.size() == getSize()) {
-        evictRandomCacheEntry();
-      }
+      monitors.add(monitor);
+      cache.replace(monitor.facilityId, monitors);
     }
 
-    monitors.add(monitor);
-
-    cache.put(monitor.facilityId, monitors);
-  }
-
-  public static void put(List<Monitor> monitors) {
     if (cache.size() == getSize()) {
       evictRandomCacheEntry();
     }
 
+    cache.put(monitor.facilityId, List.of(monitor));
+  }
+
+  public static void put(List<Monitor> monitors) {
     // assume all records in monitors have the same facility_id
     Integer key = (monitors.size() == 0) ? null : monitors.get(0).facilityId;
+
+    if (cache.containsKey(key)){
+      cache.replace(key, monitors);
+      return ;
+    }
+    else {
+      if (cache.size() == getSize()) {
+        evictRandomCacheEntry();
+      }
+    }  
+    
     cache.put(key, monitors);
   }
 

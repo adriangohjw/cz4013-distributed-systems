@@ -27,20 +27,22 @@ public class FacilityCache extends Cache {
   }
 
   public static Facility get(Integer facilityId) {
-    for (HashMap.Entry<Integer, Facility> entry : cache.entrySet()) {
-      if (entry.getKey() == facilityId) {
-        System.out.println("Gotten from cache~");
-        return entry.getValue();
-      }
-    }
-    return null;
+    return cache.get(facilityId);
   }
 
   public static void put(Facility facility) {
+    Integer key = facility.id;
+
+    if (cache.containsKey(key)){
+      cache.replace(key, facility);
+      return ;
+    }
+
     if (cache.size() == getSize()) {
       evictRandomCacheEntry();
     }
-    cache.put(facility.id, facility);
+
+    cache.put(key, facility);
   }
 
   private static void evictRandomCacheEntry() {
