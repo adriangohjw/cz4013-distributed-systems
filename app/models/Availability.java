@@ -88,7 +88,7 @@ public class Availability extends Connect {
   }
 
 
-  private static String getDayMapping(Integer dayInteger) {
+  static String getDayMapping(Integer dayInteger) {
     HashMap<Integer, String> dayMappings = new HashMap<Integer, String>();
     dayMappings.put(MONDAY, "monday");
     dayMappings.put(TUESDAY, "tuesday");
