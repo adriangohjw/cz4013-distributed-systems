@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import databaseServices.Connect;
+import databaseServices.caches.BookingCache;
 import databaseServices.exceptions.BookingUnavailableException;
 import databaseServices.exceptions.RecordNotFoundException;
 import databaseServices.exceptions.UnacceptableInputException;
@@ -16,8 +17,8 @@ public class Booking extends Connect {
   public final static int UPDATE_TIMING_ADVANCE = -1;  
   public final static int UPDATE_TIMING_POSTPONE = 1;  
 
-  Integer id;
-  Integer facilityId;
+  public Integer id;
+  public Integer facilityId;
   String day;
   LocalTime startTime;
   LocalTime endTime;
@@ -45,6 +46,11 @@ public class Booking extends Connect {
         tableName, facilityId, dayString, startTime, endTime
       );
       bookingId = execute(query);
+
+      Booking booking = new Booking(bookingId, facilityId, dayString, startTime, endTime);
+      if (bookingId != null) {
+        BookingCache.put(booking);
+      }
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -86,6 +92,9 @@ public class Booking extends Connect {
         tableName, newStartTime, newEndTime, booking.id
       );
       execute(query);
+
+      Booking updatedBooking = new Booking(id, booking.facilityId, booking.day, newStartTime, newEndTime);
+      BookingCache.put(updatedBooking);
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
@@ -130,21 +139,21 @@ public class Booking extends Connect {
   }
 
   static boolean hasBookingClashes(Integer facilityId, Integer dayInteger, LocalTime startTime, LocalTime endTime, Integer idToExclude) {
-    String query;
-    if (idToExclude == null) {
-      query = String.format(
-        "SELECT * FROM %s WHERE facility_id = %d;",
-        tableName, facilityId
-      );
-    } 
-    else {
-      query = String.format(
-        "SELECT * FROM %s WHERE facility_id = %d AND id <> %d;",
-        tableName, facilityId, idToExclude
-      );
-    }
-
     try {
+      String query;
+      if (idToExclude == null) {
+        query = String.format(
+          "SELECT * FROM %s WHERE facility_id = %d;",
+          tableName, facilityId
+        );
+      } 
+      else {
+        query = String.format(
+          "SELECT * FROM %s WHERE facility_id = %d AND id <> %d;",
+          tableName, facilityId, idToExclude
+        );
+      }
+
       List<Booking> rs = executeQuery(query);
       for (Booking booking : rs) {
         if (booking.isInDaysSelected(new Integer[]{dayInteger})) {
@@ -168,6 +177,8 @@ public class Booking extends Connect {
   }
 
   static Booking getById(Integer id) throws RecordNotFoundException {
+    // TODO: add cache
+
     String query = String.format(
       "SELECT * FROM %s WHERE id = %d;",
       tableName, id
@@ -190,7 +201,7 @@ public class Booking extends Connect {
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
-          id = rs.getInt(1);
+        id = rs.getInt(1);
       }
 
       closeConnection(null, stmt);
@@ -212,15 +223,15 @@ public class Booking extends Connect {
 
       Integer rsCount = 0;
       while (rs.next()) {
-        results.add(
-          new Booking(
-            rs.getInt("id"), 
-            rs.getInt("facility_id"), 
-            rs.getString("day"), 
-            rs.getTime("start_time").toLocalTime(),
-            rs.getTime("end_time").toLocalTime()
-          )
+        Booking booking = new Booking(
+          rs.getInt("id"), 
+          rs.getInt("facility_id"), 
+          rs.getString("day"), 
+          rs.getTime("start_time").toLocalTime(),
+          rs.getTime("end_time").toLocalTime()
         );
+        BookingCache.put(booking);
+        results.add(booking);
         rsCount++;
       }
 
