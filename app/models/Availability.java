@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import databaseServices.Connect;
+import databaseServices.caches.AvailabilityCache;
 import databaseServices.exceptions.RecordNotFoundException;
 import databaseServices.exceptions.UnacceptableInputException;
 
@@ -58,7 +59,10 @@ public class Availability extends Connect {
     );
   }
 
-  public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {    
+  public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {   
+    if (AvailabilityCache.cache.containsKey(facilityId))
+      return AvailabilityCache.cache.get(facilityId);
+
     try {      
       String query = String.format(
         "SELECT * FROM %s WHERE facility_id = %d",
@@ -87,13 +91,17 @@ public class Availability extends Connect {
     boolean isPossible = false;
 
     String query = String.format(
-        "SELECT * FROM %s WHERE facility_id = %d",
-        tableName, facilityId
-      );
+      "SELECT * FROM %s WHERE facility_id = %d",
+      tableName, facilityId
+    );
 
     try {
-      List<Availability> rs =  executeQuery(query);
-      for (Availability availability : rs) {
+      List<Availability> availabilities = 
+        AvailabilityCache.cache.containsKey(facilityId) ? 
+          AvailabilityCache.cache.get(facilityId) : 
+          executeQuery(query);
+
+      for (Availability availability : availabilities) {
         if (availability.isInDaysSelected(new Integer[]{dayInteger})) {
           if (startTime.isBefore(availability.startTime)) { break; }
           if (endTime.isAfter(availability.endTime)) { break; }
@@ -195,6 +203,8 @@ public class Availability extends Connect {
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
+
+    AvailabilityCache.put(results);
 
     return results;
   }
