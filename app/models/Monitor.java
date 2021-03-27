@@ -9,7 +9,6 @@ import databaseServices.exceptions.RecordNotFoundException;
 
 public class Monitor extends Connect {
 
-  static Connection conn;
   static String tableName = "monitors";
 
   public Integer facilityId;

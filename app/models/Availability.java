@@ -10,7 +10,6 @@ import databaseServices.exceptions.RecordNotFoundException;
 
 public class Availability extends Connect {
 
-  static Connection conn;
   static String tableName = "availabilities";
 
   public static Integer MONDAY    = 1;
