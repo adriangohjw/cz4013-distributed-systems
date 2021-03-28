@@ -17,10 +17,8 @@ import client.*;
 public class handler {
 	
 	private boolean atLeastOnce;
-	private LRUMap cache = new LRUMap(10);
-	private AvailabilityCache aCache = new AvailabilityCache();
-	private BookingCache bCache = new BookingCache();
-	private FacilityCache fCache = new FacilityCache();
+	private HashMap<String, byte[]> request_response = new HashMap<String, byte[]>();
+
 	
 	public handler(boolean atLeastOnce) {
 		this.atLeastOnce = atLeastOnce;
@@ -47,6 +45,10 @@ public class handler {
 			int_requestContent[i] = Integer.parseInt(requestContent[i]);
 		}
 		
+		if(checkRequest(requestKey)) {
+			if(!atLeastOnce)
+				return request_response.get(requestKey);
+		}
 		
 		switch(requestType) {		
 			case "Availability":
@@ -88,8 +90,13 @@ public class handler {
 				}
 				break;
 		}
-		
+		request_response.put(requestKey, response);
 		return response;
+	}
+	
+	public boolean checkRequest(String requestKey) {
+		if(request_response.get(requestKey)!=null) return true;
+		return false;
 	}
 	
 }
