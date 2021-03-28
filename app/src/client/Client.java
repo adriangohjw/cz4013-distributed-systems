@@ -7,11 +7,25 @@ public class Client {
 	public void checkAvailability() {
 		System.out.println("Please enter the name of the facility to be checked:");
 		String facilityName = UserInputTools.inputString();
-		System.out.println("Please enter the days to be checked:");
-		//days in lowercase? one day or multiple days?
-		String dayToCheck = UserInputTools.inputString().toLowerCase();
 		
-		System.out.println("Checking Facility: " + facilityName + " on " + dayToCheck);
+		String dayOfWeekPrompt = "Please select the day to be checked.\n" +
+		"Select an option from [1-7]:\n" +
+		"1. Monday\n" +
+		"2. Tuesday\n" +
+		"3. Wednesday\n" +
+		"4. Thursday\n" +
+		"5. Friday\n" +
+		"6. Saturday\n" +
+		"7. Sunday\n";
+		
+		System.out.print(dayOfWeekPrompt);
+		int dayOfWeekChoice = UserInputTools.inputInt();
+		while (dayOfWeekChoice < 1 | dayOfWeekChoice > 7) {
+			System.out.println("Invalid input - please enter an integer from 1-7!");
+			dayOfWeekChoice = UserInputTools.inputInt();
+		}
+		
+		System.out.println("Checking Facility: " + facilityName + " on " + dayOfWeekChoice);
 		
 		// insert comms logic here
 		// server should handle invalid facility names.
