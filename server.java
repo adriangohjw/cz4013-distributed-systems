@@ -14,7 +14,8 @@ public class server {
         boolean atLeastOnce = true;
         //set probability of packet loss to simulate loss of message during transmission, default is 0 
         double packetLossProb = 0;
-		
+		handler serverHandle = new handler(atLeastOnce);
+        
 		try{
 	      // Instantiate a new DatagramSocket to receive responses from the client
 	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT);
@@ -42,7 +43,7 @@ public class server {
 		      if ("QUIT".equals(receivedData))
 		    	  break;		      
 
-		      sendingDataBuffer = receivedData.getBytes();
+		      byte[] responseData = serverHandle.getResponse(senderAddress, senderPort, receivedData);
 		            
 		      DatagramPacket outputPacket = new DatagramPacket(
 		        sendingDataBuffer, sendingDataBuffer.length,
