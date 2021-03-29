@@ -1,9 +1,26 @@
 package cz4013.facilitybooking.client;
 
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.SocketAddress;
 import java.time.LocalTime;
+import java.util.UUID;
+
+import server.serialization;
+import server.deserialization;
 
 public class Client {
-
+	private final DatagramSocket clientSocket;
+	private final SocketAddress serverAddress;
+	private byte[] sendBuf = new byte[1024];
+	private byte[] recvBuf = new byte[1024];
+	
+	public Client(DatagramSocket clientSocket, SocketAddress serverAddress ) {
+		this.clientSocket = clientSocket;
+		this.serverAddress = serverAddress;
+	}
+	
 	public void checkAvailability() {
 		System.out.println("Please enter the name of the facility to be checked:");
 		String facilityName = UserInputTools.inputString();
@@ -27,9 +44,35 @@ public class Client {
 		
 		System.out.println("Checking Facility: " + facilityName + " on " + dayOfWeekChoice);
 		
-		// insert comms logic here
-		// server should handle invalid facility names.
-		// verifying of days to be done client-side?
+		//put this in another class later
+		try {
+		
+			byte[] request = null;
+		
+			String requestId = UUID.randomUUID().toString().substring(0,8); //not truly random! beware
+			String requestType = "Availability";
+			String requestFacility = facilityName;
+			String requestContent = Integer.toString(dayOfWeekChoice);
+			String requestString = requestId + "/" + requestType + "/" + requestFacility + "/" + requestContent;
+			System.out.println("Request: " + requestString);
+			request = serialization.serialize(requestString);
+		
+			sendBuf = request;
+			DatagramPacket requestPacket = new DatagramPacket(sendBuf, sendBuf.length, serverAddress);
+			clientSocket.send(requestPacket);
+			System.out.println("Request sent to: " + serverAddress.toString());
+			DatagramPacket responsePacket = new DatagramPacket(recvBuf, recvBuf.length);
+			clientSocket.receive(responsePacket);
+		
+			//THIS ASSUMES DATA RECEIVED IS STRING!!!
+			//WHICH IS NOT THE CASE, PLEASE MODIFY ACCORDINGLY
+			String recvData = deserialization.deserialize(responsePacket.getData()).toString();
+			System.out.println("Received data: " + recvData);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//if no response, send again with same UUID
+		//server should handle invalid facility names.
 	}
 
 	public void bookFacility() {

@@ -8,10 +8,9 @@ import java.net.InetSocketAddress;
 public class Main {
 
 	public static void main(String[] args) throws SocketException {
-		String clientIpAddr = "127.0.0.1";
 		String serverIpAddr = "127.0.0.1";
 		int clientPort = 65535;
-		int serverPort = 2222;
+		int serverPort = 50001;
 		
 		// menu
 		String MENU = 
@@ -27,8 +26,8 @@ public class Main {
 		"6. Exit\n" +
 		"------------------------------------\n";
 		
-		//DatagramSocket socket = new DatagramSocket(new InetSocketAddress(clientIpAddr, clientPort));
-		Client client = new Client();
+		DatagramSocket socket = new DatagramSocket(clientPort);
+		Client client = new Client(socket, new InetSocketAddress(serverIpAddr, serverPort));
 		
 		boolean exitProgram = false; 
 		while (!exitProgram) {
@@ -58,6 +57,7 @@ public class Main {
 				break;
 			}	
 		}
+		System.out.println("Shutting down!");
 		UserInputTools.closeScanner();
 	}
 
