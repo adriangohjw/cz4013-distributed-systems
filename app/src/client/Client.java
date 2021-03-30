@@ -1,4 +1,4 @@
-package cz4013.facilitybooking.client;
+package client;
 
 import java.net.SocketAddress;
 import java.time.LocalTime;

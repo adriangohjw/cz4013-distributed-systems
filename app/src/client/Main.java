@@ -1,4 +1,4 @@
-package cz4013.facilitybooking.client;
+package client;
 
 import java.net.DatagramSocket;
 import java.net.SocketException;
