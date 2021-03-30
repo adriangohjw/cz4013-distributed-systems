@@ -17,6 +17,8 @@ public class SendRecv {
 	}
 	
 	public void sendRequest(SocketAddress serverAddress, String requestType, String requestFacility, String requestContent) {
+		//TODO add timeout and retransmit
+		//TODO handle response based on request type
 		try {
 			byte[] request = null;
 			
@@ -29,7 +31,7 @@ public class SendRecv {
 			buf = request;
 			DatagramPacket requestPacket = new DatagramPacket(buf, buf.length, serverAddress);
 			clientSocket.send(requestPacket);
-			System.out.println("Request sent to: " + serverAddress.toString());
+			System.out.println("Request sent to: " + serverAddress.toString().substring(1));
 			
 			//receive packet
 			DatagramPacket responsePacket = new DatagramPacket(buf, buf.length);

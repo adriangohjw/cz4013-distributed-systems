@@ -1,6 +1,7 @@
 package cz4013.facilitybooking.client;
 
 import java.util.Scanner;
+import java.util.HashSet;
 import java.time.LocalTime;
 
 public class UserInputTools {
@@ -31,6 +32,7 @@ public class UserInputTools {
 	}
 	
 	public static String inputDayOfWeek() {
+		HashSet<Integer> days = new HashSet<Integer>();
 		String dayOfWeekPrompt = "Please select a day.\n" +
 				"Select an option from [1-7]:\n" +
 				"1. Monday\n" +
@@ -40,14 +42,34 @@ public class UserInputTools {
 				"5. Friday\n" +
 				"6. Saturday\n" +
 				"7. Sunday\n";
-	
 		System.out.print(dayOfWeekPrompt);
+
 		int dayOfWeekChoice = inputInt();
+		
 		while (dayOfWeekChoice < 1 | dayOfWeekChoice > 7) {
 			System.out.println("Invalid input - please enter an integer from 1-7!");
 			dayOfWeekChoice = inputInt();
 		}
-		return Integer.toString(dayOfWeekChoice);
+		
+		days.add(dayOfWeekChoice);
+		while (true) {
+			System.out.println("Please enter other days you would also like to check.");
+			System.out.println("If you are done, please enter 0.");
+			dayOfWeekChoice = inputInt();
+			while (dayOfWeekChoice < 0 | dayOfWeekChoice > 7) {
+				System.out.println("Invalid input - please enter an integer from 1-7, or 0 to quit!");
+				dayOfWeekChoice = inputInt();
+			}
+			if (dayOfWeekChoice == 0) {
+				break;
+			} else {
+				days.add(dayOfWeekChoice);
+			}
+		}
+		
+		String daysString = days.toString(); //includes square brackets and spaces
+		
+		return daysString.substring(1,daysString.length() - 1).replaceAll("\\s", "");
 	}
 	
 	public static LocalTime inputTime() {

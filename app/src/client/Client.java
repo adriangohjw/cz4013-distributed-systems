@@ -106,14 +106,9 @@ public class Client {
 		System.out.println("For how many minutes would you like to monitor:");
 		int monitorInterval = UserInputTools.inputInt();
 		
-		sendRecv.sendRequest(serverAddress, "Monitor", facilityName, Integer.toString(monitorInterval));
-		
 		System.out.println("Monitored Facility: " + facilityName + " , Monitor Interval: " + monitorInterval + " minutes");
-		
-		System.out.println("Monitoring... Please wait!");
-		
-		//Print all messages sent from server here
-		
+
+		sendRecv.sendRequest(serverAddress, "Monitor", facilityName, Integer.toString(monitorInterval));
 		System.out.println("Monitoring ended. Returning back to main menu.");
 	}
 
