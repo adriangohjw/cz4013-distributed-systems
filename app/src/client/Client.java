@@ -116,5 +116,11 @@ public class Client {
 		//communicate with server to return all facilities available
 		
 	}
+	
+	public void testMessageToServer() {
+		System.out.println("Please enter the message:");
+		String message = UserInputTools.inputString();
+		sendRecv.sendMessage(serverAddress, message);
+	}
 
 }
