@@ -30,6 +30,26 @@ public class UserInputTools {
 		}
 	}
 	
+	public static String inputDayOfWeek() {
+		String dayOfWeekPrompt = "Please select a day.\n" +
+				"Select an option from [1-7]:\n" +
+				"1. Monday\n" +
+				"2. Tuesday\n" +
+				"3. Wednesday\n" +
+				"4. Thursday\n" +
+				"5. Friday\n" +
+				"6. Saturday\n" +
+				"7. Sunday\n";
+	
+		System.out.print(dayOfWeekPrompt);
+		int dayOfWeekChoice = inputInt();
+		while (dayOfWeekChoice < 1 | dayOfWeekChoice > 7) {
+			System.out.println("Invalid input - please enter an integer from 1-7!");
+			dayOfWeekChoice = inputInt();
+		}
+		return Integer.toString(dayOfWeekChoice);
+	}
+	
 	public static LocalTime inputTime() {
 		try {
 			String userInput = scanner.nextLine();

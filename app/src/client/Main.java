@@ -1,6 +1,5 @@
 package cz4013.facilitybooking.client;
 
-import java.util.*;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.InetSocketAddress;
@@ -27,7 +26,7 @@ public class Main {
 		"------------------------------------\n";
 		
 		DatagramSocket socket = new DatagramSocket(clientPort);
-		Client client = new Client(socket, new InetSocketAddress(serverIpAddr, serverPort));
+		Client client = new Client(new SendRecv(socket), new InetSocketAddress(serverIpAddr, serverPort));
 		
 		boolean exitProgram = false; 
 		while (!exitProgram) {
