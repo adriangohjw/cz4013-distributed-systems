@@ -58,9 +58,20 @@ public class server {
 		      serverSocket.send(outputPacket);
 		      
 		      if(serverHandle.activeListeners != null) {
+		    	  
+		    	  Integer[] boxedArray = new Integer[7];		    	  
+		          for (int i = 0; i < 7; i++) {
+		              boxedArray[i] = Integer.valueOf(i+1);
+		          }
+		   
+		    	  
 		    	  for(int i=0; i<serverHandle.activeListeners.size(); i++) {
 		    		  Monitor monitor = serverHandle.activeListeners.get(i);
-		    		  String message = "The monitored slot for "+monitor.startTime.toString()+" to "+monitor.endTime.toString()+" has been taken.";
+		    		  List<Availability> availabilities = Availability.getAvailabilitiesForFacility(monitor.facilityId, boxedArray);
+		    		  String message = "The monitored slot for "+monitor.startTime.toString()+" to "+monitor.endTime.toString()+" has been taken. The available slots are: \n";
+		    		  for(int j=0; j<availabilities.size(); j++) {
+		    			  message = message+availabilities.get(j).day+" from "+availabilities.get(j).startTime.toString()+" to "+availabilities.get(j).endTime.toString()+"\n";
+		    		  }
 		    		  byte [] monitorSendingDataBuffer = message.getBytes();
 		    		  DatagramPacket monitorPacket = new DatagramPacket(
 		    				  monitorSendingDataBuffer, monitorSendingDataBuffer.length,
