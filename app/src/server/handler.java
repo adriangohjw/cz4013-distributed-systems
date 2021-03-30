@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import java.time.LocalTime;
 
 import databaseServices.*;
-import databaseServices.caches.*;
+import databaseServices.exceptions.*;
 import models.Availability;
 import models.Booking;
 import models.Facility;
@@ -18,8 +18,7 @@ public class handler {
 	
 	private boolean atLeastOnce;
 	private HashMap<String, byte[]> request_response = new HashMap<String, byte[]>();
-
-	
+	public List<Monitor> activeListeners;
 	public handler(boolean atLeastOnce) {
 		this.atLeastOnce = atLeastOnce;
 		DatabaseSetup.main(null);
@@ -34,6 +33,7 @@ public class handler {
 	public byte[] getResponse(InetAddress address, int port, String request) {
 		
 		byte[] response = null;
+		activeListeners = null;
 		String[] requestArray = request.split("/");
 		String requestId = requestArray[0];
 		String requestType = requestArray[1];
@@ -67,11 +67,12 @@ public class handler {
 				break;
 				
 			case "Book":
-				Integer bookingId = Booking.create(requestFacility, int_requestContent[0], 
+				Booking booking = Booking.create(requestFacility, int_requestContent[0], 
 						LocalTime.of(int_requestContent[1],int_requestContent[2],int_requestContent[3]), 
 						LocalTime.of(int_requestContent[4],int_requestContent[5],int_requestContent[6]));
+				activeListeners = booking.activeListeners;
 				try {
-					response = serialization.serialize(bookingId);
+					response = serialization.serialize(booking.id);
 				} catch (IOException e) {
 					try {
 						response = serialization.serialize(e.getMessage());
@@ -84,6 +85,11 @@ public class handler {
 				
 			case "Change":
 				Boolean changed = Booking.updateTiming(int_requestContent[0], int_requestContent[1], int_requestContent[2]);
+				try {
+					activeListeners = Booking.getById(int_requestContent[0]).activeListeners;
+				} catch (RecordNotFoundException e) {
+					System.err.println( e.getClass().getName() + ": " + e.getMessage());
+				}
 				try {
 					response = serialization.serialize(changed);
 				} catch (IOException e) {

@@ -53,7 +53,8 @@ public class Monitor extends Connect {
     return isCreated;
   }
 
-  public static void alertActiveListeners(Integer facilityId) {
+  public static List<Monitor> alertActiveListeners(Integer facilityId) {
+	List<Monitor> activeListeners = null;
     try {
       validateFacilityId(facilityId);
 
@@ -61,7 +62,7 @@ public class Monitor extends Connect {
         "SELECT * FROM %s WHERE facility_id = %d AND '%s' <= end_time;",
         tableName, facilityId, LocalDateTime.now()
       );
-      List<Monitor> activeListeners = 
+      activeListeners = 
         MonitorCache.cache.containsKey(facilityId) ?
           MonitorCache.cache.get(facilityId) :
           executeQuery(query) ;
@@ -72,6 +73,7 @@ public class Monitor extends Connect {
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
+    return activeListeners;
   }
 
   private static void validateFacilityId(Integer facilityId) throws UnacceptableInputException {

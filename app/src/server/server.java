@@ -3,6 +3,7 @@ package server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import models.*;
 
 public class server {
 	
@@ -22,7 +23,6 @@ public class server {
 	      
 	      while(true) {
 	    	  byte[] receivingDataBuffer = new byte[1024];
-	    	  byte[] sendingDataBuffer = new byte[1024];
 		      
 	    	  DatagramPacket inputPacket = new DatagramPacket(receivingDataBuffer, receivingDataBuffer.length);
 		      System.out.println("Waiting for a client to connect...");
@@ -46,7 +46,7 @@ public class server {
 		      byte[] responseData = serverHandle.getResponse(senderAddress, senderPort, receivedData);
 		            
 		      DatagramPacket outputPacket = new DatagramPacket(
-		        sendingDataBuffer, sendingDataBuffer.length,
+		        responseData, responseData.length,
 		        senderAddress,senderPort
 		      );
 		      
@@ -56,6 +56,19 @@ public class server {
               }
 		      
 		      serverSocket.send(outputPacket);
+		      
+		      if(serverHandle.activeListeners != null) {
+		    	  for(int i=0; i<serverHandle.activeListeners.size(); i++) {
+		    		  Monitor monitor = serverHandle.activeListeners.get(i);
+		    		  String message = "The monitored slot for "+monitor.startTime.toString()+" to "+monitor.endTime.toString()+" has been taken.";
+		    		  byte [] monitorSendingDataBuffer = message.getBytes();
+		    		  DatagramPacket monitorPacket = new DatagramPacket(
+		    				  monitorSendingDataBuffer, monitorSendingDataBuffer.length,
+		    			      InetAddress.getByName(monitor.address),monitor.host
+		    			      );
+		    		  serverSocket.send(monitorPacket);
+		    	  }
+		      }
 	      }
 	      
 	      // Close the socket connection

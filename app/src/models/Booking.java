@@ -19,6 +19,7 @@ public class Booking extends Connect {
 
   public Integer id;
   public Integer facilityId;
+  public List<Monitor> activeListeners;
   String day;
   LocalTime startTime;
   LocalTime endTime;
@@ -31,10 +32,11 @@ public class Booking extends Connect {
     this.endTime = endTime;
   }
 
-  public static Integer create(String facilityName, Integer dayInteger, LocalTime startTime, LocalTime endTime) {
+  public static Booking create(String facilityName, Integer dayInteger, LocalTime startTime, LocalTime endTime) {
     Integer bookingId = null;
     Integer facilityId = null;
-
+    Booking booking = null;
+    
     try {
       facilityId = Facility.getIdFromName(facilityName);
       String dayString = Availability.getDayMapping(dayInteger);
@@ -47,18 +49,17 @@ public class Booking extends Connect {
       );
       bookingId = execute(query);
 
-      Booking booking = new Booking(bookingId, facilityId, dayString, startTime, endTime);
+      booking = new Booking(bookingId, facilityId, dayString, startTime, endTime);
       if (bookingId != null) {
         BookingCache.put(booking);
+        booking.activeListeners = Monitor.alertActiveListeners(facilityId);
       }
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
     }
 
-    Monitor.alertActiveListeners(facilityId);
-
-    return bookingId;
+    return booking;
   }
 
   public static boolean updateTiming(Integer id, Integer advanceOrPostpone, Integer offsetMinutes) {
@@ -101,7 +102,7 @@ public class Booking extends Connect {
       return false;
     }
 
-    Monitor.alertActiveListeners(booking.facilityId);
+    booking.activeListeners = Monitor.alertActiveListeners(booking.facilityId);
 
     return true;
   }
@@ -176,7 +177,7 @@ public class Booking extends Connect {
     return true;
   }
 
-  static Booking getById(Integer id) throws RecordNotFoundException {
+  public static Booking getById(Integer id) throws RecordNotFoundException {
     // TODO: add cache
 
     String query = String.format(
