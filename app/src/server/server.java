@@ -24,11 +24,12 @@ public class server {
         //set probability of packet loss to simulate loss of message during transmission, default is 0 
         double packetLossProb = 0;
 		handler serverHandle = new handler(atLeastOnce);
-        
+        //set localhost address
+		InetAddress local = InetAddress.getLocalHost();
+		
 		try{
 	      // Instantiate a new DatagramSocket to receive responses from the client
-	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT);
-	      
+	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT,local);
 	      while(true) {
 	    	  byte[] receivingDataBuffer = new byte[1024];
 		      
