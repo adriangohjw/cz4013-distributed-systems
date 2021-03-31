@@ -80,7 +80,7 @@ public class handler {
 				Booking booking = Booking.create(requestFacility, int_requestContent[0], 
 						LocalTime.of(int_requestContent[1],int_requestContent[2],int_requestContent[3]), 
 						LocalTime.of(int_requestContent[4],int_requestContent[5],int_requestContent[6]));
-				activeListeners = booking.activeListeners;
+				activeListeners = Monitor.getActiveListeners(booking.id);
 				try {
 					response = serialization.serialize(booking.id);
 				} catch (IOException e) {
@@ -96,7 +96,7 @@ public class handler {
 			case "Change":
 				Boolean changed = Booking.updateTiming(int_requestContent[0], int_requestContent[1], int_requestContent[2]);
 				try {
-					activeListeners = Booking.getById(int_requestContent[0]).activeListeners;
+					activeListeners = Monitor.getActiveListeners(int_requestContent[0]);
 				} catch (RecordNotFoundException e) {
 					System.err.println( e.getClass().getName() + ": " + e.getMessage());
 				}
