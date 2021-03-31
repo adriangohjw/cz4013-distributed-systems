@@ -17,7 +17,9 @@ public class BookingCache extends Cache {
 
   
   /** 
-   * @return int
+   * Get the total size of the cache
+   * 
+   * @return int  Return size of the cache
    */
   public static int getSize() {
     return size;
@@ -25,8 +27,10 @@ public class BookingCache extends Cache {
 
   
   /** 
-   * @param facilityId
-   * @return List<Booking>
+   * Retrieve cached objects based on ID of a facility
+   * 
+   * @param facilityId        ID of facility
+   * @return List<Booking>    Return list of objects if cache found, else null
    */
   public static List<Booking> get(Integer facilityId) {
     if (cache.containsKey(facilityId)) {
@@ -38,9 +42,11 @@ public class BookingCache extends Cache {
 
   
   /** 
-   * @param booking
+   * Insert single object to be cached
+   * Note: only add to cache if it's facility_id already exist in cache (for simplicity)
+   * 
+   * @param booking Record to be cached
    */
-  // for single entry, only add to cache if it's facility_id already exist in cache (for simplicity)
   public static void put(Booking booking) {
     if (cache.containsKey(booking.facilityId)) {
       List<Booking> bookings = cache.get(booking.facilityId);
@@ -51,10 +57,13 @@ public class BookingCache extends Cache {
 
   
   /** 
-   * @param bookings
+   * Insert objects to be cached
+   * Evict record from cache if cache is full
+   * Note: assume all records in availabilities have the same facility_id
+   * 
+   * @param bookings  List of records to be cached
    */
   public static void put(List<Booking> bookings) {
-    // assume all records in availabilities have the same facility_id
     Integer key = (bookings.size() == 0) ? null : bookings.get(0).facilityId;
 
     if (cache.containsKey(key)){
@@ -69,6 +78,11 @@ public class BookingCache extends Cache {
     cache.put(key, bookings);
   }
 
+  /** 
+   * Generate a randomized cache index to evict
+   * 
+   * @return Integer  Return index of cache to evict
+   */
   private static void evictRandomCacheEntry() {
     Set<Integer> cacheKeys = cache.keySet();
     Integer randomCacheKey = cacheKeys.stream().skip(new Random().nextInt(cacheKeys.size())).findFirst().orElse(null);

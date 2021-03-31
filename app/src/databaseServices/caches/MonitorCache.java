@@ -18,7 +18,9 @@ public class MonitorCache extends Cache {
 
   
   /** 
-   * @return int
+   * Get the total size of the cache
+   * 
+   * @return int  Return size of the cache
    */
   public static int getSize() {
     return size;
@@ -26,8 +28,10 @@ public class MonitorCache extends Cache {
 
   
   /** 
-   * @param facilityId
-   * @return List<Monitor>
+   * Retrieve cached objects based on ID of a facility
+   * 
+   * @param facilityId      ID of facility
+   * @return List<Monitor>  Return list of objects if cache found, else null
    */
   public static List<Monitor> get(Integer facilityId) {
     if (cache.containsKey(facilityId)) {
@@ -39,7 +43,10 @@ public class MonitorCache extends Cache {
 
   
   /** 
-   * @param monitor
+   * Insert single object to be cached
+   * Note: only add to cache if it's facility_id already exist in cache (for simplicity)
+   * 
+   * @param monitor   Record to be cached
    */
   // for single entry, only add to cache if it's facility_id already exist in cache (for simplicity)
   public static void put(Monitor monitor) {
@@ -52,7 +59,11 @@ public class MonitorCache extends Cache {
 
   
   /** 
-   * @param monitors
+   * Insert objects to be cached
+   * Evict record from cache if cache is full
+   * Note: assume all records in availabilities have the same facility_id
+   * 
+   * @param monitors  List of records to be cached
    */
   public static void put(List<Monitor> monitors) {
     // assume all records in monitors have the same facility_id
@@ -70,6 +81,11 @@ public class MonitorCache extends Cache {
     cache.put(key, monitors);
   }
 
+  /** 
+   * Generate a randomized cache index to evict
+   * 
+   * @return Integer  Return index of cache to evict
+   */
   private static void evictRandomCacheEntry() {
     Set<Integer> cacheKeys = cache.keySet();
     Integer randomCacheKey = cacheKeys.stream().skip(new Random().nextInt(cacheKeys.size())).findFirst().orElse(null);

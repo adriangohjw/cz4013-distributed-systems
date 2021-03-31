@@ -14,7 +14,9 @@ public class FacilityCache extends Cache {
 
   
   /** 
-   * @return int
+   * Get the total size of the cache
+   * 
+   * @return int  Return size of the cache
    */
   public static int getSize() {
     return size;
@@ -22,8 +24,10 @@ public class FacilityCache extends Cache {
 
   
   /** 
-   * @param name
-   * @return Facility
+   * Retrieve cached objects based on name of a facility
+   * 
+   * @param name        Name of facility
+   * @return Facility   Return object if cache found, else null
    */
   public static Facility get(String name) {
     for (HashMap.Entry<Integer, Facility> entry : cache.entrySet()) {
@@ -37,8 +41,10 @@ public class FacilityCache extends Cache {
 
   
   /** 
-   * @param facilityId
-   * @return Facility
+   * Retrieve cached objects based on ID of a facility
+   * 
+   * @param facilityId    ID of facility
+   * @return Facility     Return object if cache found, else null
    */
   public static Facility get(Integer facilityId) {
     return cache.get(facilityId);
@@ -46,7 +52,9 @@ public class FacilityCache extends Cache {
 
   
   /** 
-   * @param facility
+   * Insert single object to be cached
+   * 
+   * @param facility    Record to be cached
    */
   public static void put(Facility facility) {
     Integer key = facility.id;
@@ -63,6 +71,11 @@ public class FacilityCache extends Cache {
     cache.put(key, facility);
   }
 
+  /** 
+   * Generate a randomized cache index to evict
+   * 
+   * @return Integer  Return index of cache to evict
+   */
   private static void evictRandomCacheEntry() {
     Set<Integer> cacheKeys = cache.keySet();
     Integer randomCacheKey = cacheKeys.stream().skip(new Random().nextInt(cacheKeys.size())).findFirst().orElse(null);
