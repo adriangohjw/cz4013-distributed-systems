@@ -93,11 +93,7 @@ public class handler {
 				
 			case "Change":
 				Boolean changed = Booking.updateTiming(int_requestContent[0], int_requestContent[1], int_requestContent[2]);
-				try {
-					activeListeners = Monitor.getActiveListeners(int_requestContent[0]);
-				} catch (RecordNotFoundException e) {
-					System.err.println( e.getClass().getName() + ": " + e.getMessage());
-				}
+				activeListeners = Monitor.getActiveListeners(int_requestContent[0]);
 				try {
 					response = serialization.serialize(changed);
 				} catch (IOException e) {
