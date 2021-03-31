@@ -11,9 +11,11 @@ public class server {
     
 	
 	/** 
+	 * 
+	 * 
 	 * @param args
-	 * @throws IOException
-	 * @throws SocketException
+	 * @throws IOException		If an I/O error occurs while reading or writing stream header
+	 * @throws SocketException	If a socket error occurs when receiving or sending on socket connection
 	 */
 	public static void main(String[] args) throws IOException, SocketException{
 		

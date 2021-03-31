@@ -3,7 +3,6 @@ package server;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
-import java.util.stream.Stream;
 import java.time.LocalTime;
 
 import databaseServices.*;
@@ -32,10 +31,12 @@ public class handler {
 
 	
 	/** 
-	 * @param address
-	 * @param port
-	 * @param request
-	 * @return byte[]
+	 * Gets the response given the client address, port and request
+	 * 
+	 * @param address		Address of client that sent the request
+	 * @param port			Port of client that sent the request
+	 * @param request		Concatenated string request containing the type of request and parameters required for the request
+	 * @return byte[]		Returns a serialized response 
 	 */
 	public byte[] getResponse(InetAddress address, int port, String request) {
 		
@@ -129,8 +130,8 @@ public class handler {
 	
 	
 	/** 
-	 * @param requestKey
-	 * @return boolean
+	 * @param requestKey	Key for checking against the Hashmap to find previous records of response 
+	 * @return boolean		Returns true if there is a record of response for the requestKey, false if no record is found
 	 */
 	public boolean checkRequest(String requestKey) {
 		if(request_response.get(requestKey)!=null) return true;
