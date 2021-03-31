@@ -1,4 +1,4 @@
-package src.client;
+package client;
 
 import java.net.SocketAddress;
 import java.time.LocalTime;

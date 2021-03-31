@@ -1,11 +1,11 @@
-package src.databaseServices.caches;
+package databaseServices.caches;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import src.models.Availability;
+import models.Availability;
 
 public class AvailabilityCache {
 

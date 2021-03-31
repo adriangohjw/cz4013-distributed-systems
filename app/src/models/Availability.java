@@ -1,16 +1,15 @@
-package src.models;
-import java.sql.ResultSet;
-import java.sql.Statement;
+package models;
+import java.sql.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import src.databaseServices.Connect;
-import src.databaseServices.caches.AvailabilityCache;
-import src.databaseServices.exceptions.RecordNotFoundException;
-import src.databaseServices.exceptions.UnacceptableInputException;
+import databaseServices.Connect;
+import databaseServices.caches.AvailabilityCache;
+import databaseServices.exceptions.RecordNotFoundException;
+import databaseServices.exceptions.UnacceptableInputException;
 
 public class Availability extends Connect {
 

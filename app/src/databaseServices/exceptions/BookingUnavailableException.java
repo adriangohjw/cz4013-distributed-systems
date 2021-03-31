@@ -1,4 +1,4 @@
-package src.databaseServices.exceptions;
+package databaseServices.exceptions;
 
 public class BookingUnavailableException extends Exception {
 

@@ -1,12 +1,11 @@
-package src.models;
-import java.sql.ResultSet;
-import java.sql.Statement;
+package models;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.databaseServices.Connect;
-import src.databaseServices.caches.FacilityCache;
-import src.databaseServices.exceptions.RecordNotFoundException;
+import databaseServices.Connect;
+import databaseServices.caches.FacilityCache;
+import databaseServices.exceptions.RecordNotFoundException;
 
 public class Facility extends Connect {
 

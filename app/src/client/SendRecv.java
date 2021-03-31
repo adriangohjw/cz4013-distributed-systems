@@ -1,4 +1,4 @@
-package src.client;
+package client;
 
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
@@ -7,9 +7,9 @@ import java.net.SocketTimeoutException;
 import java.util.UUID;
 import java.util.List;
 
-import src.server.serialization;
-import src.server.deserialization;
-import src.models.Availability;
+import server.serialization;
+import server.deserialization;
+import models.Availability;
 
 public class SendRecv {
 	DatagramSocket clientSocket;

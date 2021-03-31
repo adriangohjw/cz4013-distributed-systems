@@ -1,10 +1,9 @@
-package src.server;
+package server;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import src.models.Availability;
-import src.models.Monitor;
+import models.*;
 
 public class server {
 	

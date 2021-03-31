@@ -1,10 +1,10 @@
-package src.databaseServices.caches;
+package databaseServices.caches;
 
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
-import src.models.Facility;
+import models.Facility;
 
 public class FacilityCache extends Cache {
 

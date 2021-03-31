@@ -1,4 +1,4 @@
-package src.databaseServices.caches;
+package databaseServices.caches;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import src.models.Monitor;
+import models.Monitor;
 
 public class MonitorCache extends Cache {
 
