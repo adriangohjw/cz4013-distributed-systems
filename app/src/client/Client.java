@@ -7,11 +7,20 @@ public class Client {
 	private final SendRecv sendRecv;
 	private final SocketAddress serverAddress;
 	
+	/**
+	 * Constructor for the Client class
+	 * 
+	 * @param sendRecv An instance of SendRecv
+	 * @param serverAddress A SocketAddress object containing the IP address and port of the server
+	 */
 	public Client(SendRecv sendRecv, SocketAddress serverAddress ) {
 		this.sendRecv = sendRecv;
 		this.serverAddress = serverAddress;
 	}
 	
+	/**
+	 * Checks the availability of a facility and day specified by the user
+	 */
 	public void checkAvailability() {
 		System.out.println("Please enter the name of the facility to be checked:");
 		String facilityName = UserInputTools.inputString();
@@ -23,6 +32,9 @@ public class Client {
 		sendRecv.sendRequest(serverAddress, "Availability", facilityName, requestContent);
 	}
 
+	/**
+	 * Makes a booking request to the server for a user-specified facility, day and time period
+	 */
 	public void bookFacility() {
 		System.out.println("Please enter the name of the facility to be booked:");
 		String facilityName = UserInputTools.inputString();
@@ -56,6 +68,9 @@ public class Client {
 		sendRecv.sendRequest(serverAddress, "Book", facilityName, requestContent);
 	}
 	
+	/**
+	 * Advances or postpones an existing booking as specified by the user
+	 */
 	public void changeBooking() {
 		System.out.println("Please enter the name of the facility where you made your booking:");
 		String facilityName = UserInputTools.inputString();
@@ -97,6 +112,9 @@ public class Client {
 		sendRecv.sendRequest(serverAddress, "Change", facilityName, requestContent);
 	}
 
+	/**
+	 * Sends a callback request to the server and monitors booking changes of a facility for a specified monitor interval
+	 */
 	public void monitorAvailability() {
 		//From my understanding, this sends a request to the server
 		//for a given monitor interval to send any changes in availability
@@ -112,11 +130,17 @@ public class Client {
 		System.out.println("Monitoring ended. Returning back to main menu.");
 	}
 
+	/**
+	 * Lists all facilities available for booking to the user
+	 */
 	public void listAllFacilities() {
 		//communicate with server to return all facilities available
 		
 	}
 	
+	/**
+	 * Test function to send a message to the server
+	 */
 	public void testMessageToServer() {
 		System.out.println("Please enter the message:");
 		String message = UserInputTools.inputString();
