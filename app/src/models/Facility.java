@@ -21,10 +21,25 @@ public class Facility extends Connect {
     this.name = name;
   }
 
+  
+  /** 
+   * Retrieving the availabilities of a facility given it's name and the days we want to know
+   * 
+   * @param name                  Name of Facility
+   * @param daysSelected          Specific days selected to check availabilities (1 for Monday, 2 for Tuesday, etc.)
+   * @return List<Availability>   List of availabilities
+   */
   public static List<Availability> getAvailabilities(String name, Integer[] daysSelected) {
     return Availability.getAvailabilitiesForFacility(getIdFromName(name), daysSelected);
   }
 
+  
+  /** 
+   * Retrieve a facility's ID given it's name
+   * 
+   * @param name      Name of Facility
+   * @return Integer  Return ID of the facility instance if found, else null
+   */
   public static Integer getIdFromName(String name) {
     Facility cacheEntry = FacilityCache.get(name);
     if (cacheEntry != null) return cacheEntry.id;
@@ -46,6 +61,14 @@ public class Facility extends Connect {
     }
   }
 
+  
+  /** 
+   * Abstracted reusable method to simplified the running of SQL query to read from the DB within this class
+   * 
+   * @param query                     The SQL query to be ran
+   * @return List<Facility>           List of facilities given the query being ran
+   * @throws RecordNotFoundException  when no record found for the given query
+   */
   private static List<Facility> executeQuery(String query) throws RecordNotFoundException {
     List<Facility> results = new ArrayList<Facility>();
     

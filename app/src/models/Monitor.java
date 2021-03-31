@@ -27,6 +27,16 @@ public class Monitor extends Connect {
     this.endTime = endTime;
   }
 
+  
+  /** 
+   * Create a Monitor record
+   * 
+   * @param facilityName    Name of facility in which the booking will be made for
+   * @param address         Address of the client monitoring
+   * @param port            Port number that the client is monitoring on
+   * @param lengthMin       Duration of the monitoring, in minutes
+   * @return boolean        Return Monitor instance that is created, otherwise null
+   */
   public static boolean create(String facilityName, String address, Integer port, Integer lengthMin) {
     boolean isCreated = false;
     
@@ -53,6 +63,13 @@ public class Monitor extends Connect {
     return isCreated;
   }
 
+  
+  /** 
+   * Alert all active listeners (monitors) of a facility given by facility ID
+   * 
+   * @param facilityId      ID of Facility
+   * @return List<Monitor>  Return list of active monitors if found, else null
+   */
   public static List<Monitor> alertActiveListeners(Integer facilityId) {
 	List<Monitor> activeListeners = null;
     try {
@@ -76,12 +93,28 @@ public class Monitor extends Connect {
     return activeListeners;
   }
 
+  
+  /** 
+   * Validate if the facilityId is valid
+   * - Check that facilityId is not null and more than 0
+   * 
+   * @param facilityId
+   * @throws UnacceptableInputException when function input is invalid
+   */
   private static void validateFacilityId(Integer facilityId) throws UnacceptableInputException {
     if (facilityId == null || facilityId <= 0) {
       throw new UnacceptableInputException("startTime is not before endTime");
     }
   }
 
+  
+  /** 
+   * Abstracted reusable method to simplified the running of SQL query to read from the DB within this class
+   * 
+   * @param query                     The SQL query to be ran
+   * @return List<Monitor>            List of monitors given the query being ran
+   * @throws RecordNotFoundException  when no record found for the given query
+   */
   private static List<Monitor> executeQuery(String query) throws RecordNotFoundException {
     List<Monitor> monitors = new ArrayList<Monitor>();
     
@@ -122,6 +155,13 @@ public class Monitor extends Connect {
     return monitors;
   }
 
+  
+  /** 
+   * Abstracted reusable method to simplified the running of SQL query to update the DB within this class
+   * 
+   * @param query     The SQL query to be ran
+   * @return boolean  Return false if query executed successfully, else null
+   */
   private static boolean execute(String query) {
     boolean isSuccessful = false;
 

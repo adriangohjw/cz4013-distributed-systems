@@ -32,6 +32,16 @@ public class Booking extends Connect {
     this.endTime = endTime;
   }
 
+  
+  /** 
+   * Create a Booking record
+   * 
+   * @param facilityName  Name of facility in which the booking will be made for
+   * @param dayInteger    Specific day selected to check availability (1 for Monday, 2 for Tuesday, etc.)
+   * @param startTime     Start time of the desired booking slot
+   * @param endTime       End time of the desired booking slot
+   * @return Booking      Return Booking instance that is created, otherwise null
+   */
   public static Booking create(String facilityName, Integer dayInteger, LocalTime startTime, LocalTime endTime) {
     Integer bookingId = null;
     Integer facilityId = null;
@@ -62,6 +72,17 @@ public class Booking extends Connect {
     return booking;
   }
 
+  
+  /** 
+   * Update the timing of a booking of a certain ID, 
+   * by advancing/postponing it by a certain amount of minutes
+   * Note: total duration of booking stays the same
+   * 
+   * @param id                  ID of the Booking
+   * @param advanceOrPostpone   UPDATE_TIMING_ADVANCE / UPDATE_TIMING_POSTPONE to be passed in
+   * @param offsetMinutes       Minutes to shift the booking timing by
+   * @return boolean            Return true if operation is successful, else false
+   */
   public static boolean updateTiming(Integer id, Integer advanceOrPostpone, Integer offsetMinutes) {
     try {
       validateAdvanceOrPostpone(advanceOrPostpone);
@@ -107,6 +128,18 @@ public class Booking extends Connect {
     return true;
   }
 
+  
+  /** 
+   * For a facility with a given ID on a given day, start time and end time, check if booking is possible
+   * by taking into considerations the facility's availability, as well overlaps with exiting bookings
+   * 
+   * @param facilityId    ID of the Facility
+   * @param dayInteger    Specific day selected to check availability (1 for Monday, 2 for Tuesday, etc.)
+   * @param startTime     Start time of the desired booking slot
+   * @param endTime       End time of the desired booking slot
+   * @param idToExclude   Exclude bookings to check for, based on ID
+   * @throws Exception    when booking is not possible to be made
+   */
   private static void validateBookingAvailability(Integer facilityId, Integer dayInteger, LocalTime startTime, LocalTime endTime, Integer idToExclude) throws Exception {
     if (Availability.isBookingPossible(facilityId, dayInteger, startTime, endTime) == false) {
       throw new BookingUnavailableException("Not within facility's availability");
@@ -116,12 +149,28 @@ public class Booking extends Connect {
     }
   }
 
+  
+  /** 
+   * Validate if the startTime and endTime are valid
+   * - Check if startTime is before endTime
+   * 
+   * @param startTime                     startTime input to validate
+   * @param endTime                       endTime input to validate
+   * @throws UnacceptableInputException   when function input is invalid
+   */
   private static void validateStartTimeEndTime(LocalTime startTime, LocalTime endTime) throws UnacceptableInputException {
     if (startTime.isBefore(endTime) == false) {
       throw new UnacceptableInputException("startTime is not before endTime");
     }
   }
 
+  
+  /** 
+   * Validate if the advanceOrPostpone input is valid
+   * 
+   * @param advanceOrPostpone             advanceOrPostpone input to validate
+   * @throws UnacceptableInputException   when function input is invalid
+   */
   private static void validateAdvanceOrPostpone(int advanceOrPostpone) throws UnacceptableInputException {
     switch (advanceOrPostpone) {
       case UPDATE_TIMING_ADVANCE:
@@ -133,12 +182,32 @@ public class Booking extends Connect {
     }
   }
 
+  
+  /** 
+   * Validate if the offsetMinutes input is valid
+   * - Check if offsetMinutes is more than zero
+   * 
+   * @param offsetMinutes                 offsetMinutes input to validate
+   * @throws UnacceptableInputException   when function input is invalid
+   */
   private static void validateOffsetMinutes(int offsetMinutes) throws UnacceptableInputException {
     if (offsetMinutes < 0) {
       throw new UnacceptableInputException("offsetMinutes is unacceptable");
     }
   }
 
+  
+  /** 
+   * For a facility with a given ID on a given day, start time and end time, check if booking is possible
+   * by taking into considerations if it clashes with other existing bookings
+   * 
+   * @param facilityId    ID of the Facility
+   * @param dayInteger    Specific day selected to check availability (1 for Monday, 2 for Tuesday, etc.)
+   * @param startTime     Start time of the desired booking slot
+   * @param endTime       End time of the desired booking slot
+   * @param idToExclude   Exclude bookings to check for, based on ID
+   * @return boolean      Return true if there are clash(es), else false
+   */
   static boolean hasBookingClashes(Integer facilityId, Integer dayInteger, LocalTime startTime, LocalTime endTime, Integer idToExclude) {
     try {
       String query;
@@ -171,12 +240,28 @@ public class Booking extends Connect {
     return false;
   }
 
+  
+  /** 
+   * Check if Booking instance will clash will a given pair of desired booking by startTime, endTime
+   * 
+   * @param startTime   Start time of the desired booking slot
+   * @param endTime     End time of the desired booking slot
+   * @return boolean    Return true if booking wlll clash with a given pair of startTime, endTime
+   */
   boolean hasBookingClash(LocalTime startTime, LocalTime endTime) {
     if (endTime.isBefore(this.startTime) || endTime.equals(this.startTime)) return false;
     if (startTime.isAfter(this.endTime) || startTime.equals(this.endTime)) return false;
     return true;
   }
 
+  
+  /** 
+   * Retrieve a booking record by ID
+   * 
+   * @param id                        ID of Booking
+   * @return Booking                  Return booking instance if found, else null
+   * @throws RecordNotFoundException  when no record found for the given query
+   */
   public static Booking getById(Integer id) throws RecordNotFoundException {
     // TODO: add cache
 
@@ -188,10 +273,24 @@ public class Booking extends Connect {
     return results.get(0);
   }
 
+  
+  /** 
+   * Check if an instance is within a list of integers (based on integers)
+   * 
+   * @param daysSelected  Specific days selected to check availabilities (1 for Monday, 2 for Tuesday, etc.)
+   * @return boolean      Return true if instance is within the list of given days
+   */
   private boolean isInDaysSelected(Integer[] daysSelected) {
     return Arrays.stream(Availability.getDays(daysSelected)).anyMatch(this.day::equals);
   }
 
+  
+  /** 
+   * Abstracted reusable method to simplified the running of SQL query to update the DB within this class
+   * 
+   * @param query       The SQL query to be ran
+   * @return Integer    Return the id of the booking created / updated if successful, else null
+   */
   private static Integer execute(String query) {
     Integer id = null;
 
@@ -214,6 +313,14 @@ public class Booking extends Connect {
     return id;
   }
 
+  
+  /** 
+   * Abstracted reusable method to simplified the running of SQL query to read from the DB within this class
+   * 
+   * @param query                     The SQL query to be ran
+   * @return List<Booking>            List of bookings given the query being ran
+   * @throws RecordNotFoundException  when no record found for the given query
+   */
   private static List<Booking> executeQuery(String query) throws RecordNotFoundException {
     List<Booking> results = new ArrayList<Booking>();
     
