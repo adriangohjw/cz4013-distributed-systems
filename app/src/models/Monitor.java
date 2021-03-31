@@ -1,13 +1,15 @@
-package models;
-import java.sql.*;
+package src.models;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import databaseServices.Connect;
-import databaseServices.caches.MonitorCache;
-import databaseServices.exceptions.RecordNotFoundException;
-import databaseServices.exceptions.UnacceptableInputException;
+import src.databaseServices.Connect;
+import src.databaseServices.caches.MonitorCache;
+import src.databaseServices.exceptions.RecordNotFoundException;
+import src.databaseServices.exceptions.UnacceptableInputException;
 
 public class Monitor extends Connect {
 

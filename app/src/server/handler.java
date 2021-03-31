@@ -1,17 +1,19 @@
-package server;
+package src.server;
 
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.InetAddress;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
 
-import databaseServices.*;
-import databaseServices.exceptions.*;
-import models.Availability;
-import models.Booking;
-import models.Facility;
-import models.Monitor;
-import client.*;
+import src.databaseServices.Connect;
+import src.databaseServices.DatabaseSeed;
+import src.databaseServices.DatabaseSetup;
+import src.databaseServices.exceptions.RecordNotFoundException;
+import src.models.Availability;
+import src.models.Booking;
+import src.models.Facility;
+import src.models.Monitor;
 
 public class handler {
 	

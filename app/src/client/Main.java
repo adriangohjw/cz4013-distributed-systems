@@ -1,4 +1,4 @@
-package client;
+package src.client;
 
 import java.net.DatagramSocket;
 import java.net.SocketException;

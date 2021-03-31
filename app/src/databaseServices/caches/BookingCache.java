@@ -1,11 +1,11 @@
-package databaseServices.caches;
+package src.databaseServices.caches;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import models.Booking;
+import src.models.Booking;
 
 public class BookingCache extends Cache {
 

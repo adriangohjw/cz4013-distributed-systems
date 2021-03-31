@@ -1,4 +1,4 @@
-package databaseServices.exceptions;
+package src.databaseServices.exceptions;
 
 public class RecordNotFoundException extends Exception {
 

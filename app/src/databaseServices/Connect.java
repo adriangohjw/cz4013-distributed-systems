@@ -1,4 +1,4 @@
-package databaseServices;
+package src.databaseServices;
 
 import java.sql.*;
 
