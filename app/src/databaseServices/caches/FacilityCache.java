@@ -12,10 +12,19 @@ public class FacilityCache extends Cache {
 
   public static HashMap<Integer, Facility> cache = new HashMap<Integer, Facility>();
 
+  
+  /** 
+   * @return int
+   */
   public static int getSize() {
     return size;
   }
 
+  
+  /** 
+   * @param name
+   * @return Facility
+   */
   public static Facility get(String name) {
     for (HashMap.Entry<Integer, Facility> entry : cache.entrySet()) {
       if (entry.getValue().name.trim().equalsIgnoreCase(name.trim())) {
@@ -26,10 +35,19 @@ public class FacilityCache extends Cache {
     return null;
   }
 
+  
+  /** 
+   * @param facilityId
+   * @return Facility
+   */
   public static Facility get(Integer facilityId) {
     return cache.get(facilityId);
   }
 
+  
+  /** 
+   * @param facility
+   */
   public static void put(Facility facility) {
     Integer key = facility.id;
 

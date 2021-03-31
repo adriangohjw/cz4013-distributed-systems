@@ -15,10 +15,20 @@ public class LRUMap<K, V> {
     });
   }
 
+  
+  /** 
+   * @param key
+   * @return Optional<V>
+   */
   public Optional<V> get(K key) {
     return Optional.ofNullable(map.get(key));
   }
 
+  
+  /** 
+   * @param key
+   * @param value
+   */
   public void put(K key, V value) {
     map.put(key, value);
   }

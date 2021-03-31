@@ -30,6 +30,13 @@ public class handler {
 		}
 	}
 
+	
+	/** 
+	 * @param address
+	 * @param port
+	 * @param request
+	 * @return byte[]
+	 */
 	public byte[] getResponse(InetAddress address, int port, String request) {
 		
 		byte[] response = null;
@@ -120,6 +127,11 @@ public class handler {
 		return response;
 	}
 	
+	
+	/** 
+	 * @param requestKey
+	 * @return boolean
+	 */
 	public boolean checkRequest(String requestKey) {
 		if(request_response.get(requestKey)!=null) return true;
 		return false;

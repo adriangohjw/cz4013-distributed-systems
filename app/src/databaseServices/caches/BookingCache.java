@@ -15,10 +15,19 @@ public class BookingCache extends Cache {
   // We are storing all bookings relating to one facility in one value
   public static HashMap<Integer, List<Booking>> cache = new HashMap<Integer, List<Booking>>();
 
+  
+  /** 
+   * @return int
+   */
   public static int getSize() {
     return size;
   }
 
+  
+  /** 
+   * @param facilityId
+   * @return List<Booking>
+   */
   public static List<Booking> get(Integer facilityId) {
     if (cache.containsKey(facilityId)) {
       System.out.println("Gotten from cache~");
@@ -27,6 +36,10 @@ public class BookingCache extends Cache {
     return null;
   }
 
+  
+  /** 
+   * @param booking
+   */
   // for single entry, only add to cache if it's facility_id already exist in cache (for simplicity)
   public static void put(Booking booking) {
     if (cache.containsKey(booking.facilityId)) {
@@ -36,6 +49,10 @@ public class BookingCache extends Cache {
     }
   }
 
+  
+  /** 
+   * @param bookings
+   */
   public static void put(List<Booking> bookings) {
     // assume all records in availabilities have the same facility_id
     Integer key = (bookings.size() == 0) ? null : bookings.get(0).facilityId;

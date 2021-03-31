@@ -9,6 +9,12 @@ public class server {
 	
 	public final static int SERVICE_PORT=50001;
     
+	
+	/** 
+	 * @param args
+	 * @throws IOException
+	 * @throws SocketException
+	 */
 	public static void main(String[] args) throws IOException, SocketException{
 		
         //determines whether the server uses at-least-once or at-most-once semantics, use ALO semantics as default

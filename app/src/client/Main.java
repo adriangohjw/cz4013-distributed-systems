@@ -6,6 +6,11 @@ import java.net.InetSocketAddress;
 
 public class Main {
 
+	
+	/** 
+	 * @param args
+	 * @throws SocketException
+	 */
 	public static void main(String[] args) throws SocketException {
 		String serverIpAddr = "127.0.0.1";
 		int clientPort = 65535;

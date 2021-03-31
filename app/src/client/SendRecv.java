@@ -19,6 +19,13 @@ public class SendRecv {
 		this.clientSocket = clientSocket;
 	}
 	
+	
+	/** 
+	 * @param serverAddress
+	 * @param requestType
+	 * @param requestFacility
+	 * @param requestContent
+	 */
 	public void sendRequest(SocketAddress serverAddress, String requestType, String requestFacility, String requestContent) {
 		//TODO add timeout and retransmit
 		try {
@@ -117,6 +124,11 @@ public class SendRecv {
 		}
 	}
 	
+	
+	/** 
+	 * @param serverAddress
+	 * @param message
+	 */
 	public void sendMessage(SocketAddress serverAddress, String message) {
 		//for testing only.
 		try {

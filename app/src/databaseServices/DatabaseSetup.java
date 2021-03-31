@@ -4,6 +4,10 @@ import java.util.List;
 
 public class DatabaseSetup extends Connect {
 	
+  
+  /** 
+   * @param args[]
+   */
   public static void main(String args[]) {
     try {
       dropAllTables();

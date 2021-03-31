@@ -16,10 +16,19 @@ public class MonitorCache extends Cache {
   // We are storing all monitors relating to one facility in one value
   public static HashMap<Integer, List<Monitor>> cache = new HashMap<Integer, List<Monitor>>();
 
+  
+  /** 
+   * @return int
+   */
   public static int getSize() {
     return size;
   }
 
+  
+  /** 
+   * @param facilityId
+   * @return List<Monitor>
+   */
   public static List<Monitor> get(Integer facilityId) {
     if (cache.containsKey(facilityId)) {
       System.out.println("Gotten from cache~");
@@ -28,6 +37,10 @@ public class MonitorCache extends Cache {
     return null;
   }
 
+  
+  /** 
+   * @param monitor
+   */
   // for single entry, only add to cache if it's facility_id already exist in cache (for simplicity)
   public static void put(Monitor monitor) {
     if (cache.containsKey(monitor.facilityId)) {
@@ -37,6 +50,10 @@ public class MonitorCache extends Cache {
     }
   }
 
+  
+  /** 
+   * @param monitors
+   */
   public static void put(List<Monitor> monitors) {
     // assume all records in monitors have the same facility_id
     Integer key = (monitors.size() == 0) ? null : monitors.get(0).facilityId;

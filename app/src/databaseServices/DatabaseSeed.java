@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseSeed extends Connect {
+  
+  /** 
+   * @param args[]
+   */
   public static void main(String args[]) {
     try {
       clearTables();

@@ -12,14 +12,28 @@ public class Connect {
 
   protected static Connection conn;
 
+  
+  /** 
+   * @return Connection
+   */
   public static Connection getConn() {
     return conn;
   }
 
+  
+  /** 
+   * @throws Exception
+   */
   public static void setupConnection() throws Exception {
     conn = DriverManager.getConnection(DATABASE_URI, USERNAME, PASSWORD);
   }
 
+  
+  /** 
+   * @param rs
+   * @param stmt
+   * @throws Exception
+   */
   protected static void closeConnection(ResultSet rs, Statement stmt) throws Exception {
     if (rs != null) {
       rs.close();
@@ -30,6 +44,10 @@ public class Connect {
     conn.close();
   }
 
+  
+  /** 
+   * @param query
+   */
   protected static void executeUpdate(String query) {
     try {
       setupConnection();

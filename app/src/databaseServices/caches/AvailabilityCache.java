@@ -15,10 +15,19 @@ public class AvailabilityCache {
   // We are storing all availabilities relating to one facility in one value
   public static HashMap<Integer, List<Availability>> cache = new HashMap<Integer, List<Availability>>();
 
+  
+  /** 
+   * @return int
+   */
   public static int getSize() {
     return size;
   }
 
+  
+  /** 
+   * @param facilityId
+   * @return List<Availability>
+   */
   public static List<Availability> get(Integer facilityId) {
     if (cache.containsKey(facilityId)) {
       System.out.println("Gotten from cache~");
@@ -27,6 +36,10 @@ public class AvailabilityCache {
     return null;
   }
 
+  
+  /** 
+   * @param availabilities
+   */
   public static void put(List<Availability> availabilities) {
     // assume all records in availabilities have the same facility_id
     Integer key = (availabilities.size() == 0) ? null : availabilities.get(0).facilityId;

@@ -7,6 +7,10 @@ import java.time.LocalTime;
 public class UserInputTools {
 	private static Scanner scanner = new Scanner(System.in);
 	
+	
+	/** 
+	 * @return int
+	 */
 	public static int inputInt() {
 		try {
 			//DO NOT use nextint because it does not read \n
@@ -17,6 +21,10 @@ public class UserInputTools {
 		}
 	}
 	
+	
+	/** 
+	 * @return String
+	 */
 	public static String inputString() {
 		try {
 			String userInput = scanner.nextLine();
@@ -31,6 +39,10 @@ public class UserInputTools {
 		}
 	}
 	
+	
+	/** 
+	 * @return String
+	 */
 	public static String inputDayOfWeek() {
 		HashSet<Integer> days = new HashSet<Integer>();
 		String dayOfWeekPrompt = "Please select a day.\n" +
@@ -72,6 +84,10 @@ public class UserInputTools {
 		return daysString.substring(1,daysString.length() - 1).replaceAll("\\s", "");
 	}
 	
+	
+	/** 
+	 * @return LocalTime
+	 */
 	public static LocalTime inputTime() {
 		try {
 			String userInput = scanner.nextLine();
