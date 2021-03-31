@@ -62,7 +62,7 @@ public class Booking extends Connect {
       booking = new Booking(bookingId, facilityId, dayString, startTime, endTime);
       if (bookingId != null) {
         BookingCache.put(booking);
-        booking.activeListeners = Monitor.alertActiveListeners(facilityId);
+        booking.activeListeners = Monitor.getActiveListeners(facilityId);
       }
     }
     catch (Exception e) {
@@ -123,7 +123,7 @@ public class Booking extends Connect {
       return false;
     }
 
-    booking.activeListeners = Monitor.alertActiveListeners(booking.facilityId);
+    booking.activeListeners = Monitor.getActiveListeners(booking.facilityId);
 
     return true;
   }

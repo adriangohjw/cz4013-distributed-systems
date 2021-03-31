@@ -65,12 +65,12 @@ public class Monitor extends Connect {
 
   
   /** 
-   * Alert all active listeners (monitors) of a facility given by facility ID
+   * Get all active listeners (monitors) of a facility given by facility ID
    * 
    * @param facilityId      ID of Facility
    * @return List<Monitor>  Return list of active monitors if found, else null
    */
-  public static List<Monitor> alertActiveListeners(Integer facilityId) {
+  public static List<Monitor> getActiveListeners(Integer facilityId) {
 	List<Monitor> activeListeners = null;
     try {
       validateFacilityId(facilityId);
@@ -83,8 +83,6 @@ public class Monitor extends Connect {
         MonitorCache.cache.containsKey(facilityId) ?
           MonitorCache.cache.get(facilityId) :
           executeQuery(query) ;
-
-      // TODO: alerting all active listeners;
       
     }
     catch (Exception e) {
