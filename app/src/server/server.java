@@ -42,7 +42,7 @@ public class server {
 		      int senderPort = inputPacket.getPort();
 		      
 		      if(Math.random() < packetLossProb){
-		    	  System.out.printf("Simulated REQUEST message loss from  %s.\n", senderAddress);
+		    	  System.out.printf("Simulated REQUEST message loss from  %s.\n", senderAddress.toString());
 		    	  continue;
               }
 		      
@@ -60,7 +60,7 @@ public class server {
 		      );
 		      
 		      if(Math.random() < packetLossProb){
-		    	  System.out.printf("Simulated REPLY message loss to  %s.\n", senderAddress);
+		    	  System.out.printf("Simulated REPLY message loss to  %s.\n", senderAddress.toString());
 		    	  continue;
               }
 		      

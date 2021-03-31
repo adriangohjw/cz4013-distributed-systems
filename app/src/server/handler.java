@@ -66,7 +66,7 @@ public class handler {
 					response = serialization.serialize(availability);
 				} catch (IOException e) {
 					try {
-						response = serialization.serialize(e.getMessage());
+						response = serialization.serialize(e.getMessage().toString());
 					}
 					catch (IOException ee){
 						ee.printStackTrace();
@@ -83,7 +83,7 @@ public class handler {
 					response = serialization.serialize(booking.id);
 				} catch (IOException e) {
 					try {
-						response = serialization.serialize(e.getMessage());
+						response = serialization.serialize(e.getMessage().toString());
 					}
 					catch (IOException ee){
 						ee.printStackTrace();
@@ -98,7 +98,7 @@ public class handler {
 					response = serialization.serialize(changed);
 				} catch (IOException e) {
 					try {
-						response = serialization.serialize(e.getMessage());
+						response = serialization.serialize(e.getMessage().toString());
 					}
 					catch (IOException ee){
 						ee.printStackTrace();
@@ -112,7 +112,7 @@ public class handler {
 					response = serialization.serialize(monitoring);
 				} catch (IOException e) {
 					try {
-						response = serialization.serialize(e.getMessage());
+						response = serialization.serialize(e.getMessage().toString());
 					}
 					catch (IOException ee){
 						ee.printStackTrace();
