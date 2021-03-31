@@ -1,15 +1,17 @@
-package models;
-import java.sql.*;
+package src.models;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import databaseServices.Connect;
-import databaseServices.caches.BookingCache;
-import databaseServices.exceptions.BookingUnavailableException;
-import databaseServices.exceptions.RecordNotFoundException;
-import databaseServices.exceptions.UnacceptableInputException;
+import src.databaseServices.Connect;
+import src.databaseServices.caches.BookingCache;
+import src.databaseServices.exceptions.BookingUnavailableException;
+import src.databaseServices.exceptions.RecordNotFoundException;
+import src.databaseServices.exceptions.UnacceptableInputException;
 
 public class Booking extends Connect {
 
@@ -62,7 +64,7 @@ public class Booking extends Connect {
       booking = new Booking(bookingId, facilityId, dayString, startTime, endTime);
       if (bookingId != null) {
         BookingCache.put(booking);
-        booking.activeListeners = Monitor.alertActiveListeners(facilityId);
+        booking.activeListeners = Monitor.getActiveListeners(facilityId);
       }
     }
     catch (Exception e) {
@@ -123,7 +125,7 @@ public class Booking extends Connect {
       return false;
     }
 
-    booking.activeListeners = Monitor.alertActiveListeners(booking.facilityId);
+    booking.activeListeners = Monitor.getActiveListeners(booking.facilityId);
 
     return true;
   }

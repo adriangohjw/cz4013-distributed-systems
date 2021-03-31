@@ -1,9 +1,10 @@
-package server;
+package src.server;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import models.*;
+import src.models.Availability;
+import src.models.Monitor;
 
 public class server {
 	
@@ -11,9 +12,11 @@ public class server {
     
 	
 	/** 
+	 * 
+	 * 
 	 * @param args
-	 * @throws IOException
-	 * @throws SocketException
+	 * @throws IOException		If an I/O error occurs while reading or writing stream header
+	 * @throws SocketException	If a socket error occurs when receiving or sending on socket connection
 	 */
 	public static void main(String[] args) throws IOException, SocketException{
 		
@@ -22,11 +25,12 @@ public class server {
         //set probability of packet loss to simulate loss of message during transmission, default is 0 
         double packetLossProb = 0;
 		handler serverHandle = new handler(atLeastOnce);
-        
+        //set localhost address
+		InetAddress local = InetAddress.getLocalHost();
+		
 		try{
 	      // Instantiate a new DatagramSocket to receive responses from the client
-	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT);
-	      
+	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT,local);
 	      while(true) {
 	    	  byte[] receivingDataBuffer = new byte[1024];
 		      

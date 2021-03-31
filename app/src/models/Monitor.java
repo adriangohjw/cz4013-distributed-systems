@@ -1,13 +1,15 @@
-package models;
-import java.sql.*;
+package src.models;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import databaseServices.Connect;
-import databaseServices.caches.MonitorCache;
-import databaseServices.exceptions.RecordNotFoundException;
-import databaseServices.exceptions.UnacceptableInputException;
+import src.databaseServices.Connect;
+import src.databaseServices.caches.MonitorCache;
+import src.databaseServices.exceptions.RecordNotFoundException;
+import src.databaseServices.exceptions.UnacceptableInputException;
 
 public class Monitor extends Connect {
 
@@ -65,12 +67,12 @@ public class Monitor extends Connect {
 
   
   /** 
-   * Alert all active listeners (monitors) of a facility given by facility ID
+   * Get all active listeners (monitors) of a facility given by facility ID
    * 
    * @param facilityId      ID of Facility
    * @return List<Monitor>  Return list of active monitors if found, else null
    */
-  public static List<Monitor> alertActiveListeners(Integer facilityId) {
+  public static List<Monitor> getActiveListeners(Integer facilityId) {
 	List<Monitor> activeListeners = null;
     try {
       validateFacilityId(facilityId);
@@ -83,8 +85,6 @@ public class Monitor extends Connect {
         MonitorCache.cache.containsKey(facilityId) ?
           MonitorCache.cache.get(facilityId) :
           executeQuery(query) ;
-
-      // TODO: alerting all active listeners;
       
     }
     catch (Exception e) {
