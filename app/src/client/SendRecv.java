@@ -61,17 +61,17 @@ public class SendRecv {
 			Object recvData = deserialization.deserialize(responsePacket.getData());
 			switch(requestType) {
 			case "Availability":
-				if (recvData instanceof List) {
-					List<Availability> availabilityList = (List<Availability>) recvData;
-					System.out.println("Availability:");
-					for (Availability dayAvail : availabilityList) {
-						System.out.println(dayAvail.toString());
-					}
-				if (recvData instanceof Availability) {
+				//if (recvData instanceof List) {
+				List<Availability> availabilityList = (List<Availability>) recvData;
+				System.out.println("Availability:");
+				for (Availability dayAvail : availabilityList) {
+					System.out.println(dayAvail.toString());
+				//	}
+				/*if (recvData instanceof Availability) {
 					Availability availability = (Availability) recvData;
 					System.out.println("Availability:");
 					System.out.println(availability.toString());
-					}
+					}*/
 				}
 				break;
 			case "Book":
