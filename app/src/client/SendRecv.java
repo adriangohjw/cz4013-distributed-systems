@@ -78,7 +78,7 @@ public class SendRecv {
 							System.out.println("Change unsuccessful.");
 						}
 					}
-				}
+				
 				break;
 			case "Monitor":
 				if (recvData instanceof Boolean) {
@@ -113,10 +113,6 @@ public class SendRecv {
 			default:
 				break;
 			}
-//			if (recvData instanceof String) {
-//				String message = recvData.toString();
-//				System.out.println("Server Message: " + message);
-//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
