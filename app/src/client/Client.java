@@ -3,6 +3,9 @@ package client;
 import java.net.SocketAddress;
 import java.time.LocalTime;
 
+/**
+ * Represents the services a user is able to perform on the server
+ */
 public class Client {
 	private final SendRecv sendRecv;
 	private final SocketAddress serverAddress;
@@ -135,7 +138,20 @@ public class Client {
 	 */
 	public void listAllFacilities() {
 		//communicate with server to return all facilities available
+		String facilityList =
+				"Available facilities:\n" +
+				"Placeholder Facility 1\n" +
+				"Placeholder Facility 2\n" +
+				"Placeholder Facility 3\n";
+ 		int returnToMenuSeconds = 5;
 		
+		System.out.print(facilityList);
+ 		System.out.format("Returning to main menu in %d seconds.\n", returnToMenuSeconds);
+ 		try {
+			Thread.sleep((long) returnToMenuSeconds * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

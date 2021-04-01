@@ -11,6 +11,9 @@ import server.serialization;
 import server.deserialization;
 import models.Availability;
 
+/**
+ * Handles networking I/O between client and server
+ */
 public class SendRecv {
 	DatagramSocket clientSocket;
 	byte[] buf;
@@ -21,10 +24,11 @@ public class SendRecv {
 	
 	
 	/** 
-	 * @param serverAddress
-	 * @param requestType
-	 * @param requestFacility
-	 * @param requestContent
+	 * Sends a request to the server based on requestType and processes the response accordingly
+	 * @param serverAddress The SocketAddress of the server containing its IP address and port
+	 * @param requestType Type of request made
+	 * @param requestFacility Name of facility
+	 * @param requestContent Content to be sent in the request
 	 */
 	public void sendRequest(SocketAddress serverAddress, String requestType, String requestFacility, String requestContent) {
 		//TODO add timeout and retransmit
@@ -126,8 +130,9 @@ public class SendRecv {
 	
 	
 	/** 
-	 * @param serverAddress
-	 * @param message
+	 * A test function to send a message to the server
+	 * @param serverAddress The SocketAddress of the server containing its IP address and port
+	 * @param message The string to be sent to the server
 	 */
 	public void sendMessage(SocketAddress serverAddress, String message) {
 		//for testing only.
