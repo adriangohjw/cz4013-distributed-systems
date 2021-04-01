@@ -49,7 +49,7 @@ public class UserInputTools {
 	 * Checks if user input is a valid day of the week and returns a string of values for the days of the week
 	 * @return String Numeric values of days of the week separated by commas
 	 */
-	public static String inputDayOfWeek() {
+	public static String inputMultipleDayOfWeek() {
 		HashSet<Integer> days = new HashSet<Integer>();
 		String dayOfWeekPrompt = "Please select a day.\n" +
 				"Select an option from [1-7]:\n" +
@@ -88,6 +88,30 @@ public class UserInputTools {
 		String daysString = days.toString(); //includes square brackets and spaces
 		
 		return daysString.substring(1,daysString.length() - 1).replaceAll("\\s", "");
+	}
+	
+	/** 
+	 * Checks if user input is a valid day of the week and returns a string of the day of week selected
+	 * @return String Numeric values of days of the week separated by commas
+	 */
+	public static String inputDayOfWeek() {
+		String dayOfWeekPrompt = "Please select a day.\n" +
+				"Select an option from [1-7]:\n" +
+				"1. Monday\n" +
+				"2. Tuesday\n" +
+				"3. Wednesday\n" +
+				"4. Thursday\n" +
+				"5. Friday\n" +
+				"6. Saturday\n" +
+				"7. Sunday\n";
+	
+		System.out.print(dayOfWeekPrompt);
+		int dayOfWeekChoice = inputInt();
+		while (dayOfWeekChoice < 1 | dayOfWeekChoice > 7) {
+			System.out.println("Invalid input - please enter an integer from 1-7!");
+			dayOfWeekChoice = inputInt();
+		}
+		return Integer.toString(dayOfWeekChoice);
 	}
 	
 	
