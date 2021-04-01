@@ -11,6 +11,9 @@ import server.serialization;
 import server.deserialization;
 import models.Availability;
 
+/**
+ * Handles networking I/O between client and server
+ */
 public class SendRecv {
 	DatagramSocket clientSocket;
 	byte[] buf;
@@ -21,13 +24,13 @@ public class SendRecv {
 	
 	
 	/** 
-	 * @param serverAddress
-	 * @param requestType
-	 * @param requestFacility
-	 * @param requestContent
+	 * Sends a request to the server based on requestType and processes the response accordingly
+	 * @param serverAddress The SocketAddress of the server containing its IP address and port
+	 * @param requestType Type of request made
+	 * @param requestFacility Name of facility
+	 * @param requestContent Content to be sent in the request
 	 */
 	public void sendRequest(SocketAddress serverAddress, String requestType, String requestFacility, String requestContent) {
-		//TODO add timeout and retransmit
 		try {
 			byte[] request = null;
 			clientSocket.setSoTimeout(5000); //timeout of 5 seconds
@@ -38,11 +41,12 @@ public class SendRecv {
 			request = serialization.serialize(requestString);
 			
 			//send packet
-			buf = request;
-			DatagramPacket requestPacket = new DatagramPacket(buf, buf.length, serverAddress);
+//			buf = request;
+			DatagramPacket requestPacket = new DatagramPacket(request, request.length, serverAddress);
 			clientSocket.send(requestPacket);
 			System.out.println("Request sent to: " + serverAddress.toString().substring(1));
 			
+			buf = new byte[1024];
 			//receive packet
 			DatagramPacket responsePacket = new DatagramPacket(buf, buf.length);
 			boolean received = false;
@@ -57,30 +61,24 @@ public class SendRecv {
 			}
 			Object recvData = deserialization.deserialize(responsePacket.getData());
 			switch(requestType) {
-			case "Availability":
-				if (recvData instanceof List) {
-					List<Availability> availabilityList = (List<Availability>) deserialization.deserialize(responsePacket.getData());
-					System.out.println("Availability:");
-					for (Availability dayAvail : availabilityList) {
-						System.out.println(dayAvail.toString());
-					}
-				}
-				break;
-			case "Book":
-				if (recvData instanceof Integer) {
+				case "Availability":
+					System.out.println("Availability: ");
+					System.out.println(recvData);
+					break;
+				case "Book":
 					int bookingId = (Integer) deserialization.deserialize(responsePacket.getData());
 					System.out.println("Booking successful. Your unique booking ID is: " + Integer.toString(bookingId));
-				}
-				break;
-			case "Change":
-				if (recvData instanceof Boolean) {
-					boolean success = (Boolean) deserialization.deserialize(responsePacket.getData());
-					if (success) {
-						System.out.println("Change successful.");
-					} else {
-						System.out.println("Change unsuccessful.");
+					break;
+				case "Change":
+					if (recvData instanceof Boolean) {
+						boolean success = (Boolean) deserialization.deserialize(responsePacket.getData());
+						if (success) {
+							System.out.println("Change successful.");
+						} else {
+							System.out.println("Change unsuccessful.");
+						}
 					}
-				}
+				
 				break;
 			case "Monitor":
 				if (recvData instanceof Boolean) {
@@ -115,10 +113,6 @@ public class SendRecv {
 			default:
 				break;
 			}
-			if (recvData instanceof String) {
-				String message = recvData.toString();
-				System.out.println("Server Message: " + message);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,8 +120,9 @@ public class SendRecv {
 	
 	
 	/** 
-	 * @param serverAddress
-	 * @param message
+	 * A test function to send a message to the server
+	 * @param serverAddress The SocketAddress of the server containing its IP address and port
+	 * @param message The string to be sent to the server
 	 */
 	public void sendMessage(SocketAddress serverAddress, String message) {
 		//for testing only.
