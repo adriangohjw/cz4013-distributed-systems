@@ -34,6 +34,14 @@ public class Booking extends Connect {
   }
 
 
+  
+  /** 
+   * Retrieving the bookings of a facility given it's ID and the days we want to know
+   * 
+   * @param facilityName    Name of Facility
+   * @param daysSelected    Specific days selected to check availabilities (1 for Monday, 2 for Tuesday, etc.)
+   * @return List<Booking>  List of bookings
+   */
   public static List<Booking> getForFacilityOnGivenDays(String facilityName, Integer[] daysSelected) {
     List<Booking> bookings = new ArrayList<Booking>();
 
