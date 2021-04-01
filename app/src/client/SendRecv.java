@@ -67,6 +67,11 @@ public class SendRecv {
 					for (Availability dayAvail : availabilityList) {
 						System.out.println(dayAvail.toString());
 					}
+				if (recvData instanceof Availability) {
+					Availability availability = (Availability) recvData;
+					System.out.println("Availability:");
+					System.out.println(availability.toString());
+					}
 				}
 				break;
 			case "Book":
