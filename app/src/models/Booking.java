@@ -40,6 +40,15 @@ public class Booking extends Connect {
     try {
       Integer facilityId = Facility.getIdFromName(facilityName);
 
+      if (BookingCache.cache.containsKey(facilityId)) {
+        for (Booking booking : BookingCache.cache.get(facilityId)) {
+          if (booking.isInDaysSelected(daysSelected)) {
+            bookings.add(booking);
+          }
+        }
+        return bookings;
+      }
+
       String query = String.format(
         "SELECT * FROM %s WHERE facility_id = %d ORDER BY start_time ASC, end_time ASC;",
         tableName, facilityId
