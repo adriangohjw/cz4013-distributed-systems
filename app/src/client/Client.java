@@ -140,9 +140,9 @@ public class Client {
 		//communicate with server to return all facilities available
 		String facilityList =
 				"Available facilities:\n" +
-				"Placeholder Facility 1\n" +
-				"Placeholder Facility 2\n" +
-				"Placeholder Facility 3\n";
+				"Meeting Room 1\n" +
+				//"Placeholder Facility 2\n" +
+				"LT 1\n";
  		int returnToMenuSeconds = 5;
 		
 		System.out.print(facilityList);
