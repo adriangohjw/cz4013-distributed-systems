@@ -31,7 +31,6 @@ public class SendRecv {
 	 * @param requestContent Content to be sent in the request
 	 */
 	public void sendRequest(SocketAddress serverAddress, String requestType, String requestFacility, String requestContent) {
-		//TODO add timeout and retransmit
 		try {
 			byte[] request = null;
 			clientSocket.setSoTimeout(5000); //timeout of 5 seconds
@@ -63,7 +62,7 @@ public class SendRecv {
 			switch(requestType) {
 			case "Availability":
 				if (recvData instanceof List) {
-					List<Availability> availabilityList = (List<Availability>) deserialization.deserialize(responsePacket.getData());
+					List<Availability> availabilityList = (List<Availability>) recvData;
 					System.out.println("Availability:");
 					for (Availability dayAvail : availabilityList) {
 						System.out.println(dayAvail.toString());

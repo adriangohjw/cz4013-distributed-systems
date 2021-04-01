@@ -27,7 +27,7 @@ public class Client {
 	public void checkAvailability() {
 		System.out.println("Please enter the name of the facility to be checked:");
 		String facilityName = UserInputTools.inputString();
-		String dayOfWeekChoice = UserInputTools.inputDayOfWeek();
+		String dayOfWeekChoice = UserInputTools.inputMultipleDayOfWeek();
 		
 		String requestContent = dayOfWeekChoice;
 		
