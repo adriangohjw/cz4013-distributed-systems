@@ -4,6 +4,9 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.InetSocketAddress;
 
+/**
+ * The main menu of the client application. Initializes the client socket and instantiates instances of Client and SendRecv.
+ */
 public class Main {
 
 	

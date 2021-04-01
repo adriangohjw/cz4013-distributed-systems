@@ -3,6 +3,9 @@ package client;
 import java.net.SocketAddress;
 import java.time.LocalTime;
 
+/**
+ * Represents the services a user is able to perform on the server
+ */
 public class Client {
 	private final SendRecv sendRecv;
 	private final SocketAddress serverAddress;
@@ -135,7 +138,6 @@ public class Client {
 	 */
 	public void listAllFacilities() {
 		//communicate with server to return all facilities available
-		
 	}
 	
 	/**

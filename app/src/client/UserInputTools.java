@@ -4,11 +4,15 @@ import java.util.Scanner;
 import java.util.HashSet;
 import java.time.LocalTime;
 
+/**
+ * Handles user input for various types of data
+ */
 public class UserInputTools {
 	private static Scanner scanner = new Scanner(System.in);
 	
 	
 	/** 
+	 * Checks if user input is a valid integer and returns an integer
 	 * @return int
 	 */
 	public static int inputInt() {
@@ -23,6 +27,7 @@ public class UserInputTools {
 	
 	
 	/** 
+	 * Checks if user input is a valid non-zero length string and returns a string
 	 * @return String
 	 */
 	public static String inputString() {
@@ -41,7 +46,8 @@ public class UserInputTools {
 	
 	
 	/** 
-	 * @return String
+	 * Checks if user input is a valid day of the week and returns a string of values for the days of the week
+	 * @return String Numeric values of days of the week separated by commas
 	 */
 	public static String inputDayOfWeek() {
 		HashSet<Integer> days = new HashSet<Integer>();
@@ -86,6 +92,7 @@ public class UserInputTools {
 	
 	
 	/** 
+	 * Checks if user input is a valid time and returns LocalTime
 	 * @return LocalTime
 	 */
 	public static LocalTime inputTime() {
@@ -100,6 +107,9 @@ public class UserInputTools {
 		}
 	}
 	
+	/**
+	 * Closes the current instance of Scanner
+	 */
 	public static void closeScanner() {
 		scanner.close();
 	}
