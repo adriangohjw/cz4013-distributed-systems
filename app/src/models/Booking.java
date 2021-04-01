@@ -10,6 +10,7 @@ import databaseServices.caches.BookingCache;
 import databaseServices.exceptions.BookingUnavailableException;
 import databaseServices.exceptions.RecordNotFoundException;
 import databaseServices.exceptions.UnacceptableInputException;
+import models.Facility;
 
 public class Booking extends Connect {
 
@@ -32,6 +33,26 @@ public class Booking extends Connect {
     this.endTime = endTime;
   }
 
+
+  public static List<Booking> getForFacilityOnGivenDay(String facilityName, Integer dayInteger) {
+    List<Booking> bookings = new ArrayList<Booking>();
+
+    try {
+      Integer facilityId = Facility.getIdFromName(facilityName);
+      String dayString = Availability.getDayMapping(dayInteger);
+
+      String query = String.format(
+        "SELECT * FROM %s WHERE facility_id = %d AND day = '%s' ORDER BY start_time ASC, end_time ASC;",
+        tableName, facilityId, dayString
+      );
+      bookings = executeQuery(query);
+    }
+    catch (Exception e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage());
+    }
+
+    return bookings;
+  }
   
   /** 
    * Create a Booking record
