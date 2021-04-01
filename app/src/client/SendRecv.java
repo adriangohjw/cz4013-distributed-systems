@@ -78,39 +78,40 @@ public class SendRecv {
 							System.out.println("Change unsuccessful.");
 						}
 					}
-					break;
-				case "Monitor":
-					if (recvData instanceof Boolean) {
-						boolean ready = (Boolean) deserialization.deserialize(responsePacket.getData());
-						if (ready) {
-							System.out.println("Starting monitor.");
-							int monitorMinutes = Integer.parseInt(requestContent);
-							long durationMs = (long) monitorMinutes * 60 * 1000;
-							long startTime = System.currentTimeMillis();
-							long endTime = startTime + durationMs;
-							long currentTime;
-							try {
-								while ((currentTime = System.currentTimeMillis()) < endTime) {
-									DatagramPacket callbackPacket = new DatagramPacket(buf, buf.length);
-									long remainingTimeout = endTime - currentTime;
-									clientSocket.setSoTimeout((int) remainingTimeout);
-									clientSocket.receive(callbackPacket);
-									Object callbackRecvData = deserialization.deserialize(callbackPacket.getData());
-									if (callbackRecvData instanceof String) {
-										String callbackMessage = callbackRecvData.toString();
-										System.out.println(callbackMessage);
-									}
+				}
+				break;
+			case "Monitor":
+				if (recvData instanceof Boolean) {
+					boolean ready = (Boolean) deserialization.deserialize(responsePacket.getData());
+					if (ready) {
+						System.out.println("Starting monitor.");
+						int monitorMinutes = Integer.parseInt(requestContent);
+						long durationMs = (long) monitorMinutes * 60 * 1000;
+						long startTime = System.currentTimeMillis();
+						long endTime = startTime + durationMs;
+						long currentTime;
+						try {
+							while ((currentTime = System.currentTimeMillis()) < endTime) {
+								DatagramPacket callbackPacket = new DatagramPacket(buf, buf.length);
+								long remainingTimeout = endTime - currentTime;
+								clientSocket.setSoTimeout((int) remainingTimeout);
+								clientSocket.receive(callbackPacket);
+								Object callbackRecvData = deserialization.deserialize(callbackPacket.getData());
+								if (callbackRecvData instanceof String) {
+									String callbackMessage = callbackRecvData.toString();
+									System.out.println(callbackMessage);
 								}
-							} catch (SocketTimeoutException e) {
-								System.out.println("Monitoring period ended.");
 							}
-						} else {
-							System.out.println("Server not ready. Please try again later.");
+						} catch (SocketTimeoutException e) {
+							System.out.println("Monitoring period ended.");
 						}
+					} else {
+						System.out.println("Server not ready. Please try again later.");
 					}
-					break;
-				default:
-					break;
+				}
+				break;
+			default:
+				break;
 			}
 //			if (recvData instanceof String) {
 //				String message = recvData.toString();
