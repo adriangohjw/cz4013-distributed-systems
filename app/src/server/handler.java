@@ -82,15 +82,16 @@ public class handler {
 					
 					if(start_is_booked) {
 						timerange.remove(0);
-						timerange.remove(1);
+						timerange.remove(0);
 						while(timerange.size()>1) {
 							if(!timerange.get(0).equals(timerange.get(1))) {
 								output = output + timerange.get(0) + " - " + timerange.get(1) + " ";
 								timerange.remove(0);
+//								timerange.remove(0);
 							}
 							else {
 								timerange.remove(0);
-								timerange.remove(1);
+								timerange.remove(0);
 							}
 						}
 						output+="]";
@@ -100,10 +101,11 @@ public class handler {
 							if(!timerange.get(0).equals(timerange.get(1))) {
 								output = output + timerange.get(0) + " - " + timerange.get(1) + " ";
 								timerange.remove(0);
+								timerange.remove(0);
 							}
 							else {
 								timerange.remove(0);
-								timerange.remove(1);
+//								timerange.remove(1);
 							}
 						}
 						output+="]";
