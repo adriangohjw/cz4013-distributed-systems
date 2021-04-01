@@ -34,18 +34,22 @@ public class Booking extends Connect {
   }
 
 
-  public static List<Booking> getForFacilityOnGivenDay(String facilityName, Integer dayInteger) {
+  public static List<Booking> getForFacilityOnGivenDays(String facilityName, Integer[] daysSelected) {
     List<Booking> bookings = new ArrayList<Booking>();
 
     try {
       Integer facilityId = Facility.getIdFromName(facilityName);
-      String dayString = Availability.getDayMapping(dayInteger);
 
       String query = String.format(
-        "SELECT * FROM %s WHERE facility_id = %d AND day = '%s' ORDER BY start_time ASC, end_time ASC;",
-        tableName, facilityId, dayString
+        "SELECT * FROM %s WHERE facility_id = %d ORDER BY start_time ASC, end_time ASC;",
+        tableName, facilityId
       );
-      bookings = executeQuery(query);
+
+      for (Booking booking : executeQuery(query)) {
+        if (booking.isInDaysSelected(daysSelected)) {
+          bookings.add(booking);
+        }
+      }
     }
     catch (Exception e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage());
