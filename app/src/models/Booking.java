@@ -21,9 +21,9 @@ public class Booking extends Connect {
   public Integer id;
   public Integer facilityId;
   public List<Monitor> activeListeners;
-  String day;
-  LocalTime startTime;
-  LocalTime endTime;
+  public String day;
+  public LocalTime startTime;
+  public LocalTime endTime;
 
   Booking(Integer id, Integer facilityId, String day, LocalTime startTime, LocalTime endTime) {
     this.id = id;

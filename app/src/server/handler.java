@@ -62,11 +62,57 @@ public class handler {
 			case "Availability":
 				Integer facilityId = Facility.getIdFromName(requestFacility);
 				List<Availability> availability = Availability.getAvailabilitiesForFacility(facilityId, int_requestContent);
-				System.out.println(availability);
+				List<Booking> bookings = Booking.getForFacilityOnGivenDays(requestFacility, int_requestContent);
 				String output = "";
-				for (Availability a:availability) {
-					output+=(a.toString());
+				for(Availability i :availability) {
+					List<LocalTime> timerange = new ArrayList<LocalTime>();
+					boolean start_is_booked = false;
+					timerange.add(i.startTime);
+					timerange.add(i.endTime);
+					output = output + "[Facility: " + requestFacility + " Day: " + i.day + " Available Timeslot: ";
+					for(Booking j: bookings) {
+						if(i.day.equals(j.day)) {
+							if(j.startTime.equals(LocalTime.of(8, 0))) start_is_booked = true;
+							timerange.add(j.startTime);
+							timerange.add(j.endTime);
+						}
+					}
+					
+					Collections.sort(timerange);
+					
+					if(start_is_booked) {
+						timerange.remove(0);
+						timerange.remove(1);
+						while(timerange.size()>1) {
+							if(!timerange.get(0).equals(timerange.get(1))) {
+								output = output + timerange.get(0) + " - " + timerange.get(1) + " ";
+								timerange.remove(0);
+							}
+							else {
+								timerange.remove(0);
+								timerange.remove(1);
+							}
+						}
+						output+="]";
+					}
+					else {
+						while(timerange.size()>1) {
+							if(!timerange.get(0).equals(timerange.get(1))) {
+								output = output + timerange.get(0) + " - " + timerange.get(1) + " ";
+								timerange.remove(0);
+							}
+							else {
+								timerange.remove(0);
+								timerange.remove(1);
+							}
+						}
+						output+="]";
+					}
 				}
+				System.out.println(availability);
+//				for (Availability a:availability) {
+//					output+=(a.toString());
+//				}
 				try {
 					response = serialization.serialize(output);
 				} catch (IOException e) {
