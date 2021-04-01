@@ -29,7 +29,7 @@ public class server {
 		
 		try{
 	      // Instantiate a new DatagramSocket to receive responses from the client
-	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT,local);
+	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT);
 	      while(true) {
 	    	  byte[] receivingDataBuffer = new byte[1024];
 		      
