@@ -73,17 +73,23 @@ public class Availability extends Connect {
    * @param daysSelected        Specific days selected to check availabilities (1 for Monday, 2 for Tuesday, etc.)
    * @return List<Availability> List of availabilities
    */
-  public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {   
-    if (AvailabilityCache.cache.containsKey(facilityId))
-      return AvailabilityCache.cache.get(facilityId);
+  public static List<Availability> getAvailabilitiesForFacility(Integer facilityId, Integer[] daysSelected) {  
+    List<Availability> availabilities = new ArrayList<Availability>();
+
+    if (AvailabilityCache.cache.containsKey(facilityId)) {
+      for (Availability availability : AvailabilityCache.cache.get(facilityId)) {
+        if (availability.isInDaysSelected(daysSelected)) {
+          availabilities.add(availability);
+        }
+      }
+      return availabilities;
+    }
 
     try {      
       String query = String.format(
         "SELECT * FROM %s WHERE facility_id = %d",
         tableName, facilityId
       );
-
-      List<Availability> availabilities = new ArrayList<Availability>();
 
       List<Availability> rs = executeQuery(query);
       for (Availability availability : rs) {
