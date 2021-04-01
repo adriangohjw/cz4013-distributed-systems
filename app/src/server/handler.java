@@ -20,8 +20,8 @@ public class handler {
 	public List<Monitor> activeListeners;
 	public handler(boolean atLeastOnce) {
 		this.atLeastOnce = atLeastOnce;
-		DatabaseSetup.main(null);
-		DatabaseSeed.main(null);
+//		DatabaseSetup.main(null);
+//		DatabaseSeed.main(null);
 		try {
 			Connect.setupConnection();
 		} catch (Exception e) {
@@ -118,6 +118,8 @@ public class handler {
 						ee.printStackTrace();
 					}
 				}
+				break;
+			default:
 				break;
 		}
 		request_response.put(requestKey, response);
