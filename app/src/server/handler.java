@@ -63,8 +63,12 @@ public class handler {
 				Integer facilityId = Facility.getIdFromName(requestFacility);
 				List<Availability> availability = Availability.getAvailabilitiesForFacility(facilityId, int_requestContent);
 				System.out.println(availability);
+				String output = "";
+				for (Availability a:availability) {
+					output+=(a.toString());
+				}
 				try {
-					response = serialization.serialize(availability);
+					response = serialization.serialize(output);
 				} catch (IOException e) {
 					try {
 						response = serialization.serialize(e.getMessage().toString());
@@ -80,6 +84,7 @@ public class handler {
 						LocalTime.of(int_requestContent[1],int_requestContent[2],int_requestContent[3]), 
 						LocalTime.of(int_requestContent[4],int_requestContent[5],int_requestContent[6]));
 				activeListeners = Monitor.getActiveListeners(booking.id);
+				System.out.println(booking.id);
 				try {
 					response = serialization.serialize(booking.id);
 				} catch (IOException e) {
