@@ -60,68 +60,68 @@ public class SendRecv {
 			}
 			Object recvData = deserialization.deserialize(responsePacket.getData());
 			switch(requestType) {
-			case "Availability":
-				//if (recvData instanceof List) {
-				List<Availability> availabilityList = (List<Availability>) recvData;
-				System.out.println("Availability:");
-				for (Availability dayAvail : availabilityList) {
-					System.out.println(dayAvail.toString());
-				//	}
-				/*if (recvData instanceof Availability) {
-					Availability availability = (Availability) recvData;
+				case "Availability":
+					//if (recvData instanceof List) {
+					List<Availability> availabilityList = (List<Availability>) recvData;
 					System.out.println("Availability:");
-					System.out.println(availability.toString());
-					}*/
-				}
-				break;
-			case "Book":
-				if (recvData instanceof Integer) {
-					int bookingId = (Integer) deserialization.deserialize(responsePacket.getData());
-					System.out.println("Booking successful. Your unique booking ID is: " + Integer.toString(bookingId));
-				}
-				break;
-			case "Change":
-				if (recvData instanceof Boolean) {
-					boolean success = (Boolean) deserialization.deserialize(responsePacket.getData());
-					if (success) {
-						System.out.println("Change successful.");
-					} else {
-						System.out.println("Change unsuccessful.");
+					for (Availability dayAvail : availabilityList) {
+						System.out.println(dayAvail.toString());
+					//	}
+					/*if (recvData instanceof Availability) {
+						Availability availability = (Availability) recvData;
+						System.out.println("Availability:");
+						System.out.println(availability.toString());
+						}*/
 					}
-				}
-				break;
-			case "Monitor":
-				if (recvData instanceof Boolean) {
-					boolean ready = (Boolean) deserialization.deserialize(responsePacket.getData());
-					if (ready) {
-						System.out.println("Starting monitor.");
-						int monitorMinutes = Integer.parseInt(requestContent);
-						long durationMs = (long) monitorMinutes * 60 * 1000;
-						long startTime = System.currentTimeMillis();
-						long endTime = startTime + durationMs;
-						long currentTime;
-						try {
-							while ((currentTime = System.currentTimeMillis()) < endTime) {
-								DatagramPacket callbackPacket = new DatagramPacket(buf, buf.length);
-								long remainingTimeout = endTime - currentTime;
-								clientSocket.setSoTimeout((int) remainingTimeout);
-								clientSocket.receive(callbackPacket);
-								Object callbackRecvData = deserialization.deserialize(callbackPacket.getData());
-								if (callbackRecvData instanceof String) {
-									String callbackMessage = callbackRecvData.toString();
-									System.out.println(callbackMessage);
-								}
-							}
-						} catch (SocketTimeoutException e) {
-							System.out.println("Monitoring period ended.");
+					break;
+				case "Book":
+					if (recvData instanceof Integer) {
+						int bookingId = (Integer) deserialization.deserialize(responsePacket.getData());
+						System.out.println("Booking successful. Your unique booking ID is: " + Integer.toString(bookingId));
+					}
+					break;
+				case "Change":
+					if (recvData instanceof Boolean) {
+						boolean success = (Boolean) deserialization.deserialize(responsePacket.getData());
+						if (success) {
+							System.out.println("Change successful.");
+						} else {
+							System.out.println("Change unsuccessful.");
 						}
-					} else {
-						System.out.println("Server not ready. Please try again later.");
 					}
-				}
-				break;
-			default:
-				break;
+					break;
+				case "Monitor":
+					if (recvData instanceof Boolean) {
+						boolean ready = (Boolean) deserialization.deserialize(responsePacket.getData());
+						if (ready) {
+							System.out.println("Starting monitor.");
+							int monitorMinutes = Integer.parseInt(requestContent);
+							long durationMs = (long) monitorMinutes * 60 * 1000;
+							long startTime = System.currentTimeMillis();
+							long endTime = startTime + durationMs;
+							long currentTime;
+							try {
+								while ((currentTime = System.currentTimeMillis()) < endTime) {
+									DatagramPacket callbackPacket = new DatagramPacket(buf, buf.length);
+									long remainingTimeout = endTime - currentTime;
+									clientSocket.setSoTimeout((int) remainingTimeout);
+									clientSocket.receive(callbackPacket);
+									Object callbackRecvData = deserialization.deserialize(callbackPacket.getData());
+									if (callbackRecvData instanceof String) {
+										String callbackMessage = callbackRecvData.toString();
+										System.out.println(callbackMessage);
+									}
+								}
+							} catch (SocketTimeoutException e) {
+								System.out.println("Monitoring period ended.");
+							}
+						} else {
+							System.out.println("Server not ready. Please try again later.");
+						}
+					}
+					break;
+				default:
+					break;
 			}
 			if (recvData instanceof String) {
 				String message = recvData.toString();

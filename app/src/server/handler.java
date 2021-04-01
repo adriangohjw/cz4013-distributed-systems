@@ -62,6 +62,7 @@ public class handler {
 			case "Availability":
 				Integer facilityId = Facility.getIdFromName(requestFacility);
 				List<Availability> availability = Availability.getAvailabilitiesForFacility(facilityId, int_requestContent);
+				System.out.println(availability);
 				try {
 					response = serialization.serialize(availability);
 				} catch (IOException e) {
