@@ -25,11 +25,12 @@ public class server {
         double packetLossProb = 0;
 		handler serverHandle = new handler(atLeastOnce);
         //set localhost address
-		InetAddress local = InetAddress.getLocalHost();
+		InetAddress local = InetAddress.getByName("0.0.0.0");
 		
 		try{
 	      // Instantiate a new DatagramSocket to receive responses from the client
-	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT);
+	      DatagramSocket serverSocket = new DatagramSocket(SERVICE_PORT,local);
+	      System.out.println(serverSocket.getInetAddress());
 	      while(true) {
 	    	  byte[] receivingDataBuffer = new byte[1024];
 		      
@@ -81,12 +82,20 @@ public class server {
 		    		  for(int j=0; j<availabilities.size(); j++) {
 		    			  message = message+availabilities.get(j).day+" from "+availabilities.get(j).startTime.toString()+" to "+availabilities.get(j).endTime.toString()+"\n";
 		    		  }
-		    		  byte [] monitorSendingDataBuffer = message.getBytes();
-		    		  DatagramPacket monitorPacket = new DatagramPacket(
-		    				  monitorSendingDataBuffer, monitorSendingDataBuffer.length,
-		    			      InetAddress.getByName(monitor.address),monitor.host
-		    			      );
-		    		  serverSocket.send(monitorPacket);
+		    		  try {
+		    			  byte [] monitorSendingDataBuffer = serialization.serialize(message);
+		    			  String monitor_address = monitor.address.substring(1);
+			    		  
+			    		  InetSocketAddress to_send = new InetSocketAddress(monitor_address, monitor.host);
+			    		  DatagramPacket monitorPacket = new DatagramPacket(
+			    				  monitorSendingDataBuffer, monitorSendingDataBuffer.length,
+			    			      to_send
+			    			      );
+			    		  serverSocket.send(monitorPacket);
+		    		  }
+		    		  catch (IOException e) {
+		    			  e.printStackTrace();
+		    		  }
 		    	  }
 		      }
 	      }

@@ -87,14 +87,14 @@ public class handler {
 							if(!timerange.get(0).equals(timerange.get(1))) {
 								output = output + timerange.get(0) + " - " + timerange.get(1) + " ";
 								timerange.remove(0);
-//								timerange.remove(0);
+								timerange.remove(0);
 							}
 							else {
 								timerange.remove(0);
 								timerange.remove(0);
 							}
 						}
-						output+="]";
+						output+="]\n";
 					}
 					else {
 						while(timerange.size()>1) {
@@ -105,16 +105,13 @@ public class handler {
 							}
 							else {
 								timerange.remove(0);
-//								timerange.remove(1);
+								timerange.remove(0);
 							}
 						}
 						output+="]";
 					}
 				}
 				System.out.println(availability);
-//				for (Availability a:availability) {
-//					output+=(a.toString());
-//				}
 				try {
 					response = serialization.serialize(output);
 				} catch (IOException e) {
@@ -131,16 +128,26 @@ public class handler {
 				Booking booking = Booking.create(requestFacility, int_requestContent[0], 
 						LocalTime.of(int_requestContent[1],int_requestContent[2],int_requestContent[3]), 
 						LocalTime.of(int_requestContent[4],int_requestContent[5],int_requestContent[6]));
-				activeListeners = Monitor.getActiveListeners(booking.id);
-				System.out.println(booking.id);
-				try {
-					response = serialization.serialize(booking.id);
-				} catch (IOException e) {
+				if(booking != null) {
+					activeListeners = Monitor.getActiveListeners(booking.facilityId);
 					try {
-						response = serialization.serialize(e.getMessage().toString());
+						response = serialization.serialize(booking.id);
+					} catch (IOException e) {
+						try {
+							response = serialization.serialize(e.getMessage().toString());
+						}
+						catch (IOException ee){
+							ee.printStackTrace();
+						}
 					}
-					catch (IOException ee){
-						ee.printStackTrace();
+				}
+				else {
+					System.out.println("Booking Error");
+					try {
+						response = serialization.serialize("Booking Error");
+					}
+					catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 				break;
