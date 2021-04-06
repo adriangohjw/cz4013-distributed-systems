@@ -15,9 +15,21 @@ public class Main {
 	 * @throws SocketException
 	 */
 	public static void main(String[] args) throws SocketException {
+		int argPort = 50001;
+		
+		if (args.length > 0) {
+			try {
+				argPort = Integer.parseInt(args[0]);
+				System.out.println("Client port set to: " + argPort);
+			} catch (NumberFormatException e) {
+				System.err.println("Argument" + args[0] + " must be an integer.");
+				System.exit(1);
+			}
+		}
+		
 		String serverIpAddr = "127.0.0.1";
 		int clientPort = 65535;
-		int serverPort = 50001;
+		int serverPort = argPort;
 		
 		// menu
 		String MENU = 
