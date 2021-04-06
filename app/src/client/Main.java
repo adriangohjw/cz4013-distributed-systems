@@ -15,7 +15,7 @@ public class Main {
 	 * @throws SocketException
 	 */
 	public static void main(String[] args) throws SocketException {
-		int argPort = 50001;
+		int argPort = 65535;
 		
 		if (args.length > 0) {
 			try {
@@ -29,7 +29,7 @@ public class Main {
 		
 		String serverIpAddr = "127.0.0.1";
 		int clientPort = argPort;
-		int serverPort = 2222;
+		int serverPort = 50001;
 		
 		// menu
 		String MENU = 
