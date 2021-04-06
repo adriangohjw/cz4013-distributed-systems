@@ -66,8 +66,14 @@ public class SendRecv {
 					System.out.println(recvData);
 					break;
 				case "Book":
-					int bookingId = (Integer) deserialization.deserialize(responsePacket.getData());
-					System.out.println("Booking successful. Your unique booking ID is: " + Integer.toString(bookingId));
+					if (recvData instanceof Integer) {
+						int bookingId = (Integer) deserialization.deserialize(responsePacket.getData());
+						System.out.println("Booking successful. Your unique booking ID is: " + Integer.toString(bookingId));
+					}
+					if (recvData instanceof String) {
+						String msg = (String) deserialization.deserialize(responsePacket.getData());
+						System.out.println(msg);
+					}
 					break;
 				case "Change":
 					if (recvData instanceof Boolean) {
@@ -100,6 +106,7 @@ public class SendRecv {
 								if (callbackRecvData instanceof String) {
 									String callbackMessage = callbackRecvData.toString();
 									System.out.println(callbackMessage);
+									sendRequest(serverAddress,"Availability",requestFacility,"1,2,3,4,5,6,7");
 								}
 							}
 						} catch (SocketTimeoutException e) {
