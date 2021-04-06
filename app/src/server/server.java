@@ -78,10 +78,10 @@ public class server {
 		    	  for(int i=0; i<serverHandle.activeListeners.size(); i++) {
 		    		  Monitor monitor = serverHandle.activeListeners.get(i);
 		    		  List<Availability> availabilities = Availability.getAvailabilitiesForFacility(monitor.facilityId, boxedArray);
-		    		  String message = "The monitored slot for "+monitor.startTime.toString()+" to "+monitor.endTime.toString()+" has been taken. The available slots are: \n";
-		    		  for(int j=0; j<availabilities.size(); j++) {
-		    			  message = message+availabilities.get(j).day+" from "+availabilities.get(j).startTime.toString()+" to "+availabilities.get(j).endTime.toString()+"\n";
-		    		  }
+		    		  String message = "The monitor for "+monitor.startTime.toString()+" to "+monitor.endTime.toString()+" has detected changes to the availability.\n";
+//		    		  for(int j=0; j<availabilities.size(); j++) {
+//		    			  message = message+availabilities.get(j).day+" from "+availabilities.get(j).startTime.toString()+" to "+availabilities.get(j).endTime.toString()+"\n";
+//		    		  }
 		    		  try {
 		    			  byte [] monitorSendingDataBuffer = serialization.serialize(message);
 		    			  String monitor_address = monitor.address.substring(1);
