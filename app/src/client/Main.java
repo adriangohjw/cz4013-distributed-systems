@@ -29,7 +29,7 @@ public class Main {
 		
 		String serverIpAddr = "127.0.0.1";
 		int clientPort = argPort;
-		int serverPort = 50001;
+		int serverPort = 2222;
 		
 		// menu
 		String MENU = 
