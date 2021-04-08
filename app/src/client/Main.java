@@ -16,18 +16,27 @@ public class Main {
 	 */
 	public static void main(String[] args) throws SocketException {
 		int argPort = 65535;
+		String argAddr = "127.0.0.1";
 		
 		if (args.length > 0) {
 			try {
-				argPort = Integer.parseInt(args[0]);
-				System.out.println("Client port set to: " + argPort);
-			} catch (NumberFormatException e) {
-				System.err.println("Argument" + args[0] + " must be an integer.");
+				if (args.length == 1) {
+					argPort = Integer.parseInt(args[0]);
+					System.out.println("Client port set to: " + argPort);
+				}
+				if (args.length == 2) {
+					argPort = Integer.parseInt(args[0]);
+					argAddr = args[1];
+					System.out.println("Client port set to " + argPort);
+					System.out.println("Server address set to " + argAddr);
+				}
+			} catch (Exception e) {
+				System.err.println("Invalid arguments.");
 				System.exit(1);
 			}
 		}
 		
-		String serverIpAddr = "127.0.0.1";
+		String serverIpAddr = argAddr;
 		int clientPort = argPort;
 		int serverPort = 50001;
 		
