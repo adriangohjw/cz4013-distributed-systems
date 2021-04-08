@@ -16,7 +16,8 @@ public class Main {
 	 */
 	public static void main(String[] args) throws SocketException {
 		int argPort = 65535;
-		String argAddr = "127.0.0.1";
+		String argServerAddr = "127.0.0.1";
+		int argServerPort = 50001;
 		
 		if (args.length > 0) {
 			try {
@@ -26,9 +27,17 @@ public class Main {
 				}
 				if (args.length == 2) {
 					argPort = Integer.parseInt(args[0]);
-					argAddr = args[1];
+					argServerAddr = args[1];
 					System.out.println("Client port set to " + argPort);
-					System.out.println("Server address set to " + argAddr);
+					System.out.println("Server address set to " + argServerAddr);
+				}
+				if (args.length == 3) {
+					argPort = Integer.parseInt(args[0]);
+					argServerAddr = args[1];
+					argServerPort = Integer.parseInt(args[2]);
+					System.out.println("Client port set to " + argPort);
+					System.out.println("Server address set to " + argServerAddr);
+					System.out.println("Server port set to " + argServerPort);
 				}
 			} catch (Exception e) {
 				System.err.println("Invalid arguments.");
@@ -36,9 +45,9 @@ public class Main {
 			}
 		}
 		
-		String serverIpAddr = argAddr;
+		String serverIpAddr = argServerAddr;
 		int clientPort = argPort;
-		int serverPort = 50001;
+		int serverPort = argServerPort;
 		
 		// menu
 		String MENU = 
